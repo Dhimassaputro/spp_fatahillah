@@ -47,8 +47,6 @@ public class Transaksi extends javax.swing.JFrame {
     private String no, nis, nisn, nama, alamat, kelas, kodekelas;
     private int biayaspp, jumlahbulan, jumlahbulan1, jumlahtotal, bayar, kembali;
 
-   // String tempNis, tempNisn, tempNama;
-
     public Transaksi() {
         initComponents();
         
@@ -64,20 +62,6 @@ public class Transaksi extends javax.swing.JFrame {
         //tampildata("SELECT * FROM transaksi");
         //tampildetailtransaksi("select * from detailtransaksi");
     }
-    
-    /*public Transaksi(String nis, String nisn, String nama) {
-        initComponents();
-        
-        //Setelah menjalankan dua instances, maka setelah ditutuo
-        //set visible frame untuk mengaktifkan instance sebelumnya
-
-        this.setVisible(true);  //wajid untuk mengaktifkan instance
-        txt_no.setText( MyConstanta.NO_TRANSAKSI );
-        txt_no.setText( MyConstanta.TANGGAL_TRANSAKSI );
-        txt_nis.setText( MyConstanta.NIS );
-        txt_nisn.setText( MyConstanta.NISN );
-        txt_nama.setText( MyConstanta.NAMA );
-    }*/
     
     public void pencarian_transaksi(){
         String cari = txt_cari.getText();
