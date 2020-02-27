@@ -151,7 +151,7 @@
                                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                                       <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="Tanggal_transaksi" min="-2" pref="122" max="-2" attributes="0"/>
+                                      <Component id="txt_tanggal" min="-2" pref="122" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -282,7 +282,7 @@
                           <Component id="jScrollPane2" min="-2" pref="130" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="Tanggal_transaksi" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_tanggal" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -491,7 +491,7 @@
             <Property name="text" type="java.lang.String" value="Tanggal Transaksi"/>
           </Properties>
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="Tanggal_transaksi">
+        <Component class="com.toedter.calendar.JDateChooser" name="txt_tanggal">
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane3">
           <AuxValues>

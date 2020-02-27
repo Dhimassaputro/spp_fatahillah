@@ -5,7 +5,6 @@ package spp_fatahillah;
  * and open the template in the editor.
  */
 
-
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -34,37 +33,51 @@ import net.sf.jasperreports.web.*;
  * @author Dhimas
  */
 public class Transaksi extends javax.swing.JFrame {
-private Connection con;
-private DefaultTableModel tabmode;
-private Statement st;
-private ResultSet RsSiswa;
-private ResultSet RsTransaksi;
-private ResultSet RsSpp;
-private ResultSet RsDetail;
-private String sql="";
-private String no, nis, nisn, nama, alamat, kelas, kodekelas;
-private int biayaspp, jumlahbulan, jumlahbulan1, jumlahtotal, bayar, kembali;
 
-public static String tempNis, tempNisn, tempNama;
+   
 
-    /**
-     * Creates new form transaksii
-     */
+    private Connection con;
+    private DefaultTableModel tabmode;
+    private Statement st;
+    private ResultSet RsSiswa;
+    private ResultSet RsTransaksi;
+    private ResultSet RsSpp;
+    private ResultSet RsDetail;
+    private String sql="";
+    private String no, nis, nisn, nama, alamat, kelas, kodekelas;
+    private int biayaspp, jumlahbulan, jumlahbulan1, jumlahtotal, bayar, kembali;
+
+   // String tempNis, tempNisn, tempNama;
+
     public Transaksi() {
         initComponents();
-        koneksitabel();
-        DaftarSiswa();
-        DaftarSpp();
-        tampildata("SELECT * FROM transaksi");
-        tampildetailtransaksi("select * from detailtransaksi");
+        
+        this.setVisible(true);
+        txt_no.setText( MyConstanta.NO_TRANSAKSI );
+        txt_no.setText( MyConstanta.TANGGAL_TRANSAKSI );
+        txt_nis.setText( MyConstanta.NIS );
+        txt_nisn.setText( MyConstanta.NISN );
+        txt_nama.setText( MyConstanta.NAMA );
+        //koneksitabel();
+        //DaftarSiswa();
+        //DaftarSpp();
+        //tampildata("SELECT * FROM transaksi");
+        //tampildetailtransaksi("select * from detailtransaksi");
     }
+    
+    /*public Transaksi(String nis, String nisn, String nama) {
+        initComponents();
+        
+        //Setelah menjalankan dua instances, maka setelah ditutuo
+        //set visible frame untuk mengaktifkan instance sebelumnya
 
-    public void setSiswa(String nis, String nisn, String nama)
-    {
-        txt_nis.setText(nis);
-        txt_nisn.setText(nisn);
-        txt_nama.setText(nama);
-    }
+        this.setVisible(true);  //wajid untuk mengaktifkan instance
+        txt_no.setText( MyConstanta.NO_TRANSAKSI );
+        txt_no.setText( MyConstanta.TANGGAL_TRANSAKSI );
+        txt_nis.setText( MyConstanta.NIS );
+        txt_nisn.setText( MyConstanta.NISN );
+        txt_nama.setText( MyConstanta.NAMA );
+    }*/
     
     public void pencarian_transaksi(){
         String cari = txt_cari.getText();
@@ -107,6 +120,14 @@ public static String tempNis, tempNisn, tempNama;
         Btn_Tambah.setEnabled(true);
         Btn_Simpan.setEnabled(false);
     }
+    
+    /*public void setSiswa() {
+        Siswa s = new Siswa();
+        txt_nis.setText(s.getNis());
+        txt_nisn.setText(s.getNisn());
+        txt_nama.setText(s.getNama());
+    }*/
+     
     private void form_disable(){
         txt_nisn.setEnabled(false);
         txt_nama.setEnabled(false);
@@ -174,8 +195,6 @@ public void clearData(){
             con=DriverManager.getConnection("jdbc:mysql:"
                     + "//localhost:3306/pembayaran", "root", "");
             System.out.println("KONEKSI BERHASIL");
-            JOptionPane.showMessageDialog(null, "SELAMAT DATANG");
-            
         } catch (Exception e) {
             System.out.println("KONEKSI GAGAL \n"+e);
         }
@@ -389,7 +408,7 @@ public void clearData(){
         jLabel15 = new javax.swing.JLabel();
         txt_no = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        Tanggal_transaksi = new com.toedter.calendar.JDateChooser();
+        txt_tanggal = new com.toedter.calendar.JDateChooser();
         jScrollPane3 = new javax.swing.JScrollPane();
         Gridspp = new javax.swing.JTable();
         txt_cari = new javax.swing.JTextField();
@@ -682,7 +701,7 @@ public void clearData(){
                                     .addGap(43, 43, 43)
                                     .addComponent(jLabel16)
                                     .addGap(18, 18, 18)
-                                    .addComponent(Tanggal_transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txt_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(Btn_Kembali)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -782,7 +801,7 @@ public void clearData(){
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Tanggal_transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -882,7 +901,7 @@ public void clearData(){
 
         nis=String.valueOf(txt_nis.getText());
         SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
-        Tanggal=format.format(Tanggal_transaksi.getDate());
+        Tanggal=format.format(txt_tanggal.getDate());
         kodekelas=Cmb_kl.getItemAt(Cmb_kl.getSelectedIndex()).toString();
 
         totalItem=Integer.parseInt(txt_jumlah1.getText());
@@ -994,6 +1013,12 @@ public void clearData(){
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
          // TODO add your handling code here:
+        MyConstanta.NO_TRANSAKSI = txt_no.getText();
+        
+        //set tanggal
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+        MyConstanta.TANGGAL_TRANSAKSI = formater.format( txt_tanggal.getDate().toString() );
+        
         DataSiswa ds = new DataSiswa();
         ds.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -1045,7 +1070,6 @@ public void clearData(){
     private javax.swing.JComboBox Cmb_kl;
     private javax.swing.JTable Gridspp;
     private javax.swing.JTable Gridtransaksi;
-    private com.toedter.calendar.JDateChooser Tanggal_transaksi;
     private javax.swing.JButton btn_cari;
     private javax.swing.JButton btn_tambah;
     private javax.swing.JButton jButton1;
@@ -1081,6 +1105,7 @@ public void clearData(){
     private javax.swing.JTextField txt_nis;
     private javax.swing.JTextField txt_nisn;
     private javax.swing.JTextField txt_no;
+    private com.toedter.calendar.JDateChooser txt_tanggal;
     private javax.swing.JTextField txt_total;
     private javax.swing.JTextField txt_total1;
     // End of variables declaration//GEN-END:variables

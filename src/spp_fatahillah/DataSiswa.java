@@ -47,13 +47,6 @@ public class DataSiswa extends javax.swing.JFrame {
     }
      
      private void tampilData(){
-        /*DefaultTableModel datalist = new DefaultTableModel();
-        datalist.addColumn("No");
-        datalist.addColumn("NIS");
-        datalist.addColumn("NISN");
-        datalist.addColumn("Nama Siswa");
-        datalist.addColumn("Alamat");
-        datalist.addColumn("Kelas");*/
         try {
 
             Connection koneksi = new koneksii().getConnection();
@@ -157,18 +150,18 @@ public class DataSiswa extends javax.swing.JFrame {
     private void GridsiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GridsiswaMouseClicked
        int row = Gridsiswa.getSelectedRow();
        
-       Siswa s = new Siswa(Gridsiswa.getModel().getValueAt(row, 0).toString(), 
+       //lempar data ke form transaksi melalui static variable
+       /*new Transaksi(Gridsiswa.getModel().getValueAt(row, 0).toString(), 
                Gridsiswa.getModel().getValueAt(row, 1).toString(), 
-               Gridsiswa.getModel().getValueAt(row, 2).toString());
+               Gridsiswa.getModel().getValueAt(row, 2).toString());*/
        
-       /*
-        id = Integer.parseInt(jTable3.getModel().getValueAt(row, 0).toString());
-        tf_event.setText(jTable3.getModel().getValueAt(row, 1).toString());
-        ta_deskripsi.setText(jTable3.getModel().getValueAt(row, 2).toString());
-        tf_tanggal.setText(jTable3.getModel().getValueAt(row, 3).toString());
-        tf_jam.setText(jTable3.getModel().getValueAt(row, 4).toString());
-       */
-             // TODO add your handling code here:
+       MyConstanta.NIS = Gridsiswa.getModel().getValueAt(row, 0).toString();
+       MyConstanta.NISN = Gridsiswa.getModel().getValueAt(row, 1).toString();
+       MyConstanta.NAMA = Gridsiswa.getModel().getValueAt(row, 2).toString();
+       
+       new Transaksi();
+       
+       this.dispose(); //tutup form
     }//GEN-LAST:event_GridsiswaMouseClicked
 
     /**
