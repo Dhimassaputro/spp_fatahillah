@@ -45,7 +45,7 @@ private String sql="";
 private String no, nis, nisn, nama, alamat, kelas, kodekelas;
 private int biayaspp, jumlahbulan, jumlahbulan1, jumlahtotal, bayar, kembali;
 
-//public String tempNis, tempNisn, tempNama;
+public static String tempNis, tempNisn, tempNama;
 
     /**
      * Creates new form transaksii
