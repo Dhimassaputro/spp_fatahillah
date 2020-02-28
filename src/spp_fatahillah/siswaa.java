@@ -37,7 +37,7 @@ private DefaultTableModel tabModel;
 private Statement st;
 private ResultSet RsSiswa;
 private String sql="";
-private String NIS, nisn, nama, alamat, kelas;
+private String nis, nisn, nama, alamat, status, pengguna;
     /**
      * Creates new form siswaa
      */
@@ -48,14 +48,13 @@ private String NIS, nisn, nama, alamat, kelas;
     
     public void initTable()
     {
-        Object[] columnNames = { "NIS", 
+        Object[] columnNames = { "No",
+                                    "NIS", 
                                     "NISN",
                                     "Nama",
                                     "Alamat",
                                     "Status",
-                                    "Pengguna",
-                                    "Dibuat",
-                                    "Diubah" };
+                                    "Pengguna"};
         
         DefaultTableModel model =  new DefaultTableModel();
         tabModel = new DefaultTableModel(null, columnNames);
@@ -72,11 +71,11 @@ private String NIS, nisn, nama, alamat, kelas;
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txt_kode = new javax.swing.JTextField();
+        txt_nis = new javax.swing.JTextField();
         txt_nisn = new javax.swing.JTextField();
         txt_nama = new javax.swing.JTextField();
         txt_alamat = new javax.swing.JTextField();
-        txt_kelas = new javax.swing.JTextField();
+        txt_status = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -97,19 +96,21 @@ private String NIS, nisn, nama, alamat, kelas;
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txt_pengguna = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 255, 153));
 
-        txt_kode.addActionListener(new java.awt.event.ActionListener() {
+        txt_nis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_kodeActionPerformed(evt);
+                txt_nisActionPerformed(evt);
             }
         });
-        txt_kode.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_nis.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txt_kodeKeyPressed(evt);
+                txt_nisKeyPressed(evt);
             }
         });
 
@@ -144,7 +145,7 @@ private String NIS, nisn, nama, alamat, kelas;
         jLabel3.setText("Alamat");
 
         jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jLabel4.setText("Kelas");
+        jLabel4.setText("Status");
 
         Gridsiswa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -260,9 +261,9 @@ private String NIS, nisn, nama, alamat, kelas;
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(126, 126, 126)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel6)
-                .addGap(74, 74, 74)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -270,13 +271,22 @@ private String NIS, nisn, nama, alamat, kelas;
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(36, 36, 36))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel8.setText("Pengguna");
+
+        txt_pengguna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_penggunaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -291,17 +301,6 @@ private String NIS, nisn, nama, alamat, kelas;
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txt_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txt_alamat, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(71, 71, 71)
-                                        .addComponent(txt_kelas, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -309,20 +308,30 @@ private String NIS, nisn, nama, alamat, kelas;
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_kode, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txt_nis, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel8))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txt_alamat, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(71, 71, 71)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txt_pengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txt_status, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btn_Refresh)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txt_cetak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btn_Tambah)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btn_Kembali)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txt_cetak, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_Tambah))
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_Kembali)
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_Simpan)
                                 .addGap(18, 18, 18)
@@ -331,7 +340,9 @@ private String NIS, nisn, nama, alamat, kelas;
                                 .addComponent(btn_Batal)
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_Keluar)
-                                .addGap(0, 133, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_Refresh)
+                                .addGap(0, 42, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,7 +363,7 @@ private String NIS, nisn, nama, alamat, kelas;
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_kode, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_nis, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -368,22 +379,22 @@ private String NIS, nisn, nama, alamat, kelas;
                             .addComponent(jLabel3)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txt_kelas, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btn_Kembali)
-                        .addComponent(btn_Simpan)
-                        .addComponent(btn_Hapus)
-                        .addComponent(btn_Batal)
-                        .addComponent(btn_Keluar)
-                        .addComponent(jLabel4))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btn_Tambah)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_status, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_Kembali)
+                    .addComponent(btn_Simpan)
+                    .addComponent(btn_Hapus)
+                    .addComponent(btn_Batal)
+                    .addComponent(btn_Keluar)
+                    .addComponent(jLabel4)
                     .addComponent(btn_Refresh)
+                    .addComponent(btn_Tambah))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txt_pengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_cetak))
-                .addGap(16, 16, 16))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -394,9 +405,7 @@ private String NIS, nisn, nama, alamat, kelas;
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -448,9 +457,9 @@ private String NIS, nisn, nama, alamat, kelas;
         form_clear();
         btn_Tambah.setEnabled(true);
         btn_Simpan.setEnabled(true);
-        txt_kode.requestFocus();
+        txt_nis.requestFocus();
         btn_Hapus.setEnabled(true);
-        txt_kode.setEnabled(true);
+        txt_nis.setEnabled(true);
     }//GEN-LAST:event_btn_BatalActionPerformed
 
     private void btn_HapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_HapusKeyPressed
@@ -495,19 +504,20 @@ private String NIS, nisn, nama, alamat, kelas;
         // TODO add your handling code here:
         JTable table = (JTable)evt.getSource();
         int row = table.getSelectedRow();
-        String user = txt_kode.getText();
-        txt_kode.setText((String)table.getValueAt(row, 0));
+        String user = txt_nis.getText();
+        txt_nis.setText((String)table.getValueAt(row, 0));
         txt_nisn.setText((String)table.getValueAt(row, 1));
         txt_nama.setText((String)table.getValueAt(row, 2));
         txt_alamat.setText((String)table.getValueAt(row, 3));
-        txt_kelas.setText((String)table.getValueAt(row, 4));
-        user = txt_kode.getText();
+        txt_status.setText((String)table.getValueAt(row, 4));
+        txt_pengguna.setText((String)table.getValueAt(row, 5));
+        user = txt_nis.getText();
         enableData();
     }//GEN-LAST:event_GridsiswaMousePressed
 
     private void txt_alamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_alamatActionPerformed
         // TODO add your handling code here:
-        txt_kelas.requestFocus();
+        txt_status.requestFocus();
     }//GEN-LAST:event_txt_alamatActionPerformed
 
     private void txt_namaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_namaActionPerformed
@@ -520,38 +530,45 @@ private String NIS, nisn, nama, alamat, kelas;
         txt_nama.requestFocus();
     }//GEN-LAST:event_txt_nisnActionPerformed
 
-    private void txt_kodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_kodeKeyPressed
+    private void txt_nisKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_nisKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_kodeKeyPressed
+    }//GEN-LAST:event_txt_nisKeyPressed
 
-    private void txt_kodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_kodeActionPerformed
+    private void txt_nisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nisActionPerformed
         // TODO add your handling code here:
         txt_nisn.requestFocus();
-    }//GEN-LAST:event_txt_kodeActionPerformed
+    }//GEN-LAST:event_txt_nisActionPerformed
+
+    private void txt_penggunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_penggunaActionPerformed
+        // TODO add your handling code here:
+        txt_pengguna.requestFocus();
+    }//GEN-LAST:event_txt_penggunaActionPerformed
 
     public void pencarian_siswa(){
         String cari = txt_cari.getText();
-        Object[] Baris={"NIS","NISN","Nama","Alamat","Kelas"};
+        Object[] Baris={"NIS","NISN","Nama","Alamat","Status","Pengguna"};
         tabModel = new DefaultTableModel(null, Baris);
         Gridsiswa.setModel(tabModel);
         Connection koneksi = new koneksii().getConnection();
         try{
             String sql="Select * from siswa where "
-                    + "NIS like '%"+cari+"%' "
+                    + "nis like '%"+cari+"%' "
                     + "OR nisn like '%"+cari+"%' "
                     + "OR nama like '%"+cari+"%' "
                     + "OR alamat like '%"+cari+"%' "
-                    + "OR kelas like '%"+cari+"%' "
+                    + "OR status like '%"+cari+"%' "
+                    + "OR pengguna like '%"+cari+"%' "
                     + "order by kode asc";
             java.sql.Statement stmt=koneksi.createStatement();
             java.sql.ResultSet rslt=stmt.executeQuery(sql);
             while(rslt.next()){
-                String NIS=rslt.getString("NIS");
-                String nisn=rslt.getString("nisn");
-                String nama=rslt.getString("nama");
-                String alamat=rslt.getString("alamat");
-                String kelas=rslt.getString("kelas");
-                String[] dataField={NIS, nisn, nama, alamat, kelas};
+                String nis = rslt.getString("nis");
+                String nisn = rslt.getString("nisn");
+                String nama = rslt.getString("nama");
+                String alamat = rslt.getString("alamat");
+                String status = rslt.getString("status");
+                String pengguna = rslt.getString("pengguna");
+                String[] dataField={nis, nisn, nama, alamat, status, pengguna};
                 tabModel.addRow(dataField);
             }
         }
@@ -560,12 +577,13 @@ private String NIS, nisn, nama, alamat, kelas;
     }
     private void tampildata(String sql){
         DefaultTableModel datalist = new DefaultTableModel();
-        datalist.addColumn("No");
+        
         datalist.addColumn("NIS");
         datalist.addColumn("NISN");
         datalist.addColumn("Nama Siswa");
         datalist.addColumn("Alamat");
-        datalist.addColumn("Kelas");
+        datalist.addColumn("Status");
+        datalist.addColumn("Pengguna");
         try {
             int i = 1;
             st=con.createStatement();
@@ -573,7 +591,7 @@ private String NIS, nisn, nama, alamat, kelas;
             while (RsSiswa.next()){
                 datalist.addRow(new Object[]{
                     (""+i++),RsSiswa.getString(1), RsSiswa.getString(2), 
-                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5)
+                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5), RsSiswa.getString(6), RsSiswa.getString(7)
                 });
                 Gridsiswa.setModel(datalist);
             }
@@ -593,32 +611,35 @@ private void form_awal(){
         btn_Hapus.setEnabled(false);
     }
 private void form_disable(){
-        txt_kode.setEnabled(false);
+        txt_nis.setEnabled(false);
         txt_nisn.setEnabled(false);
         txt_nama.setEnabled(false);
         txt_alamat.setEnabled(false);
-        txt_kelas.setEnabled(false);
+        txt_status.setEnabled(false);
+        txt_pengguna.setEnabled(false);
        }
     public void disableData(){
-    txt_kode.setEnabled(false);
+    txt_nis.setEnabled(false);
     txt_nisn.setEnabled(false);
     txt_nama.setEnabled(false);
     txt_alamat.setEnabled(false);
-    txt_kelas.setEnabled(false);
+    txt_status.setEnabled(false);
+    txt_pengguna.setEnabled(false);
     btn_Tambah.setEnabled(true);
     btn_Kembali.setEnabled(false);
     btn_Simpan.setEnabled(false);
     btn_Hapus.setEnabled(false);
     btn_Batal.setEnabled(false);
     btn_Keluar.setEnabled(false);
-      btn_Tambah.requestFocus();
+    btn_Tambah.requestFocus();
 }
 public void enableData(){
-    txt_kode.setEnabled(true);
+    txt_nis.setEnabled(true);
     txt_nisn.setEnabled(true);
     txt_nama.setEnabled(true);
     txt_alamat.setEnabled(true);
-    txt_kelas.setEnabled(true);
+    txt_status.setEnabled(true);
+    txt_pengguna.setEnabled(true);
     btn_Tambah.setEnabled(false);
     btn_Kembali.setEnabled(true);
     btn_Simpan.setEnabled(true);
@@ -627,29 +648,31 @@ public void enableData(){
     btn_Keluar.setEnabled(true);
 }
 public void clearData(){
-    txt_kode.setText("");
+    txt_nis.setText("");
     txt_nisn.setText("");
     txt_nama.setText("");
     txt_alamat.setText("");
-    txt_kelas.setText("");
-    txt_kode.requestFocus();
+    txt_status.setText("");
+    txt_pengguna.setText("");
+    txt_nis.requestFocus();
 }
 private void form_clear(){
-        txt_kode.setText("");
+        txt_nis.setText("");
         txt_nisn.setText("");
         txt_nama.setText("");
         txt_alamat.setText("");
-        txt_kelas.setText("");
+        txt_status.setText("");
+        txt_pengguna.setText("");
        }
 public void refreshTable(){
     try{
         koneksi konek = new  koneksi();
         konek.config();
         Statement stmtTable = konek.con.createStatement();
-        String sqlTabel = "select * from siswa order by NIS";
+        String sqlTabel = "select * from siswa order by nis";
         ResultSet rs = stmtTable.executeQuery(sqlTabel);
         ResultSetMetaData meta = rs.getMetaData();
-        String Header[] = {"NIS","NISN","Nama","Alamat","Kelas"};
+        String Header[] = {"NIS","NISN","Nama","Alamat","Status","Pengguna"};
         int col = meta.getColumnCount();
         int brs = 0;
         while (rs.next()){
@@ -659,11 +682,12 @@ public void refreshTable(){
         int x = 0;
         rs.beforeFirst();
         while(rs.next()){
-            dataTable[x][0]=rs.getString("NIS");
+            dataTable[x][0]=rs.getString("nis");
             dataTable[x][1]=rs.getString("nisn");
             dataTable[x][2]=rs.getString("nama");
             dataTable[x][3]=rs.getString("alamat");
-            dataTable[x][4]=rs.getString("kelas");
+            dataTable[x][4]=rs.getString("status");
+            dataTable[x][5]=rs.getString("pengguna");
             x++;  
         }
         Gridsiswa.setModel(new DefaultTableModel(dataTable,Header));
@@ -678,14 +702,14 @@ public void simpanData(){
         konek.config();
         Statement stmt = konek.con.createStatement();
         Statement stmt1 = konek.con.createStatement();
-        String user = txt_kode.getText();
-        String sql2 = "delete from siswa where NIS='" + user + "'";
+        String user = txt_nis.getText();
+        String sql2 = "delete from siswa where nis='" + user + "'";
         stmt1.executeUpdate(sql2);
         stmt1.close();
-        String sql1 = "insert into siswa(NIS,nisn,nama,alamat,kelas)"
+        String sql1 = "insert into siswa(nis, nisn, nama, alamat, status, pengguna)"
                 + "values('"
-                +txt_kode.getText()+"','"+txt_nisn.getText()+"','"
-                +txt_nama.getText()+"','"+txt_alamat.getText()+"','"+txt_kelas.getText()+"')";
+                +txt_nis.getText()+"','"+txt_nisn.getText()+"','"
+                +txt_nama.getText()+"','"+txt_alamat.getText()+"','"+"','"+txt_status.getText()+"','"+txt_pengguna.getText()+"')";
         stmt.executeUpdate(sql1);
         stmt.close();
         JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
@@ -700,9 +724,9 @@ public void deleteData(){
 try{
     koneksi konek = new koneksi();
     konek.config();
-    String user = txt_kode.getText();
+    String user = txt_nis.getText();
     Statement stmt = konek.con.createStatement();
-    String sql = "delete from siswa where NIS='" + user + "'";
+    String sql = "delete from siswa where nis='" + user + "'";
     stmt.executeUpdate(sql);
     stmt.close();
     JOptionPane.showMessageDialog(null, "Delete User Sukses");
@@ -765,15 +789,17 @@ try{
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txt_alamat;
     private javax.swing.JTextField txt_cari;
     private javax.swing.JButton txt_cetak;
-    private javax.swing.JTextField txt_kelas;
-    private javax.swing.JTextField txt_kode;
     private javax.swing.JTextField txt_nama;
+    private javax.swing.JTextField txt_nis;
     private javax.swing.JTextField txt_nisn;
+    private javax.swing.JTextField txt_pengguna;
+    private javax.swing.JTextField txt_status;
     // End of variables declaration//GEN-END:variables
 }
