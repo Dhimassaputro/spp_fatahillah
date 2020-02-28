@@ -18,7 +18,7 @@ public class koneksii {
     Connection con;
     public Connection getConnection(){
         try {
-              con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pembayaran","root","");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pembayaran","root","");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Koneksi GAGAL \n"+e);
         }

@@ -48,12 +48,10 @@ public class DataSiswa extends javax.swing.JFrame {
      
      private void tampilData(){
         try {
-
             Connection koneksi = new koneksii().getConnection();
             java.sql.Statement st = koneksi.createStatement();
             RsSiswa = st.executeQuery("SELECT * FROM siswa");
-            Gridsiswa.setModel(DbUtils.resultSetToTableModel(RsSiswa));
-            
+            Gridsiswa.setModel(DbUtils.resultSetToTableModel(RsSiswa));            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
         }
@@ -161,7 +159,7 @@ public class DataSiswa extends javax.swing.JFrame {
        
        new Transaksi();
        
-       this.dispose(); //tutup form
+       this.setVisible( false ); //tutup form
     }//GEN-LAST:event_GridsiswaMouseClicked
 
     /**

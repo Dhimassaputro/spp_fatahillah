@@ -16,8 +16,6 @@ public class koneksi {
     String pass = "";
     String url = "jdbc:MYSQL://localhost:3306/pembayaran";
     
-    
-    
     public void config() {
         try{
             Class.forName("org.gjt.mm.mysql.Driver");
