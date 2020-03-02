@@ -77,38 +77,40 @@ public class Transaksi extends javax.swing.JFrame {
     
     public void pencarian_transaksi(){
         String cari = txt_cari.getText();
-        Object[] Baris={"No Transaksi","Tanggal","NIS","Kode Kelas","Jumlah Bulan","Jumlah Total","Jumlah Bayar","Kembalian"};
+        Object[] Baris={"NIS","Tanggal","Kelas","Biaya","Pengguna","Kembali","Bulan","Tahun"};
         tabmode = new DefaultTableModel(null, Baris);
         Gridtransaksi.setModel(tabmode);
         Connection koneksi = new koneksii().getConnection();
         try{
             String sql="Select * from transaksi where "
-                    + "NIS like '%"+cari+"%' "
+                    + "nis like '%"+cari+"%' "
                     + "OR tanggal like '%"+cari+"%' "
-                    + "OR kode_siswa like '%"+cari+"%' "
-                    + "OR kode_kelas like '%"+cari+"%' "
-                    + "OR jumlah_bulan like '%"+cari+"%' "
-                    + "OR jumlah_total like '%"+cari+"%' "
-                    + "OR jumlah_bayar like '%"+cari+"%' "
+                    + "OR kelas like '%"+cari+"%' "
+                    + "OR biaya like '%"+cari+"%' "
+                    + "OR pengguna like '%"+cari+"%' "
                     + "OR kembali like '%"+cari+"%' "
+                    + "OR bulan like '%"+cari+"%' "
+                    + "OR tahun like '%"+cari+"%' "
                     + "order by no asc";
             java.sql.Statement stmt=koneksi.createStatement();
             java.sql.ResultSet rslt=stmt.executeQuery(sql);
             while(rslt.next()){
-                String NIS=rslt.getString("NIS");
-                String tanggal=rslt.getString("tanggal");
-                String kode_kelas=rslt.getString("kode_kelas");
-                String jumlah_bulan=rslt.getString("jumlah_bulan");
-                String jumlah_total=rslt.getString("jumlah_total");
-                String jumlah_bayar=rslt.getString("jumlah_bayar");
-                String kembali=rslt.getString("kembali");
-                String[] dataField={NIS, tanggal, kode_kelas, jumlah_bulan, jumlah_total, jumlah_bayar, kembali};
+                String nis = rslt.getString("nis");
+                String tanggal = rslt.getString("tanggal");
+                String kelas = rslt.getString("kelas");
+                String biaya = rslt.getString("biaya");
+                String pengguna = rslt.getString("pengguna");
+                String kembali = rslt.getString("kembali");
+                String bulan = rslt.getString("bulan");
+                String tahun = rslt.getString("tahun");
+                String[] dataField={nis, tanggal, kelas, biaya, pengguna, kembali, bulan, tahun};
                 tabmode.addRow(dataField);
             }
         }
         catch(Exception ex){
         }
     }
+    
     private void form_awal(){
         form_disable();
         form_clear(); 
@@ -121,9 +123,10 @@ public class Transaksi extends javax.swing.JFrame {
         txt_nisn.setEnabled(false);
         txt_nama.setEnabled(false);
         txt_biaya.setEnabled(false);
-
+        
         Cmb_kl.setEnabled(false);
     }
+    
     private void form_enable(){
         txt_no.setEnabled(true);
         txt_nis.setEnabled(true);
@@ -132,19 +135,20 @@ public class Transaksi extends javax.swing.JFrame {
         txt_biaya.setEnabled(true);
         Cmb_kl.setEnabled(true);
     }
-public void clearData(){
-    txt_no.setText(null);
-    txt_nis.setText(null);
-    txt_nisn.setText(null);
-    txt_nama.setText(null);
-    txt_biaya.setText(null);
-    txt_total.setText(null);
+    
+    public void clearData(){
+        txt_no.setText(null);
+        txt_nis.setText(null);
+        txt_nisn.setText(null);
+        txt_nama.setText(null);
+        txt_biaya.setText(null);
+        txt_total.setText(null);
         
         txt_jumlahbayar.setText("");
         txt_jumlah_transaksi.setText("");
         txt_total.setText("");
         txt_kembali.setText("");
-}
+    }
     private void form_clear(){
         txt_no.setText("");
         txt_nisn.setText("");
@@ -177,6 +181,7 @@ public void clearData(){
             System.out.println("KONEKSI GAGAL \n"+e);
         }
     }
+    
     private void tampildata(String sql){
         DefaultTableModel datalist = new DefaultTableModel();
         datalist.addColumn("No transaksi");
@@ -188,9 +193,8 @@ public void clearData(){
         datalist.addColumn("Kembali");
         datalist.addColumn("Bulan");
         datalist.addColumn("Tahun");
-        datalist.addColumn("Dibuat");
         try {
-            int i = 1;
+            int i = 0;
             st=con.createStatement();
             RsTransaksi=st.executeQuery("SELECT * FROM transaksi");
             while (RsTransaksi.next()){
@@ -198,14 +202,15 @@ public void clearData(){
                     (""+i++), 
                     RsTransaksi.getString(2), RsTransaksi.getString(1), RsTransaksi.getString(3), 
                     RsTransaksi.getString(4), RsTransaksi.getString(5), RsTransaksi.getString(6), RsTransaksi.getString(7), 
-                    RsTransaksi.getString(8), RsTransaksi.getString(9)
+                    RsTransaksi.getString(8)
                 });
                 Gridtransaksi.setModel(datalist);
         }
             } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
         }
-        }
+    }
+    
     private void DaftarSiswa(){
         try {
             String sql = "Select * FROM siswa";
@@ -220,6 +225,7 @@ public void clearData(){
                 +e.getMessage());
         }
     }
+    
     private void DaftarSpp(){
         Cmb_kl.removeAllItems();
         Cmb_kl.addItem("Pilih");

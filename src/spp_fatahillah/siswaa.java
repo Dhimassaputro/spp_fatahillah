@@ -67,6 +67,33 @@ private String nis, nisn, nama, alamat, status, pengguna;
         Gridsiswa.setModel(tabModel);
     }*/
 
+    private void tampildata(String sql){
+        DefaultTableModel datalist = new DefaultTableModel();
+        
+        datalist.addColumn("NIS");
+        datalist.addColumn("NISN");
+        datalist.addColumn("Nama Siswa");
+        datalist.addColumn("Alamat");
+        datalist.addColumn("Status");
+        datalist.addColumn("Pengguna");
+        
+        try {
+            int i = 1;
+            st = con.createStatement();
+            RsSiswa = st.executeQuery("SELECT * FROM siswa");
+            while (RsSiswa.next()){
+                datalist.addRow(new Object[]{
+                    (""+i++),RsSiswa.getString(1), RsSiswa.getString(2), 
+                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5) 
+                });
+                Gridsiswa.setModel(datalist);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
+        }
+    }
+    
     private void form_awal(){
         form_disable();
         form_clear(); 
@@ -94,15 +121,6 @@ private String nis, nisn, nama, alamat, status, pengguna;
         txt_alamat.setEnabled(false);
         txt_status.setEnabled(false);
         txt_pengguna.setEnabled(false);
-    }
-    
-    private void form_clear(){
-       txt_nis.setText("");
-       txt_nisn.setText("");
-       txt_nama.setText("");
-       txt_alamat.setText("");
-       txt_status.setText("");
-       txt_pengguna.setText("");
     }
     
     public void disableData(){
@@ -146,6 +164,45 @@ private String nis, nisn, nama, alamat, status, pengguna;
         txt_nis.requestFocus();
     }
     
+    private void form_clear(){
+       txt_nis.setText("");
+       txt_nisn.setText("");
+       txt_nama.setText("");
+       txt_alamat.setText("");
+       txt_status.setText("");
+       txt_pengguna.setText("");
+    }
+    
+    private void aksi_tambah(){
+        form_enable();
+        btn_Tambah.setEnabled(true);
+        btn_Simpan.setEnabled(true);
+        btn_Batal.setEnabled(true);
+        btn_Hapus.setEnabled(false);
+        btn_Tambah.setEnabled(true);
+        
+        txt_nis.setEnabled(true);
+        txt_nis.requestFocus(true);
+    }
+    
+    public void deleteData(){
+        try{
+            koneksi konek = new koneksi();
+            konek.config();
+            String user = txt_nis.getText();
+            Statement stmt = konek.con.createStatement();
+            String sql = "delete from siswa where nis='" + user + "'";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            JOptionPane.showMessageDialog(null, "Delete User Sukses");
+            clearData();
+            refreshTable();
+            disableData();
+        } catch (Exception e){
+            System.out.println(e);
+    }
+}
+    
     private void koneksitabel (){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -157,34 +214,7 @@ private String nis, nisn, nama, alamat, status, pengguna;
             System.out.println("KONEKSI GAGAL \n"+e);
         }
     }
-    
-    private void tampildata(String sql){
-        DefaultTableModel datalist = new DefaultTableModel();
-        
-        datalist.addColumn("NIS");
-        datalist.addColumn("NISN");
-        datalist.addColumn("Nama Siswa");
-        datalist.addColumn("Alamat");
-        datalist.addColumn("Status");
-        datalist.addColumn("Pengguna");
-        
-        try {
-            int i = 1;
-            st = con.createStatement();
-            RsSiswa = st.executeQuery("SELECT * FROM siswa");
-            while (RsSiswa.next()){
-                datalist.addRow(new Object[]{
-                    (""+i++),RsSiswa.getString(1), RsSiswa.getString(2), 
-                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5) 
-                });
-                Gridsiswa.setModel(datalist);
-            }
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
-        }
-    }
-    
+
     public void refreshTable(){
         try{
             koneksi konek = new  koneksi();
@@ -219,49 +249,30 @@ private String nis, nisn, nama, alamat, status, pengguna;
     }
 }
 
-    /*private void simpandetail(){
-            int jumlah_baris = Gridsiswa.getRowCount();
-            if(jumlah_baris == 0){
-                JOptionPane.showMessageDialog(rootPane, "Tabel Masih Kosong!");
-            }else{
-                try {
-                    int i=0;
-                    while(i < jumlah_baris){
-                        st.executeUpdate("insert into siswa"
-                        + "(nis,nisn,nama,alamat,status,pengguna) "
-                        + "values('"+txt_nis.getText() +"', "
-                        + "'"+Gridsiswa.getValueAt(i, 0)+"',"
-                        + "'"+Gridsiswa.getValueAt(i, 1)+"',"
-                        + "'"+Gridsiswa.getValueAt(i, 2)+"',"
-                        + "'"+Gridsiswa.getValueAt(i, 3)+"',"
-                        + "'"+Gridsiswa.getValueAt(i, 4)+"',"
-                        + "'"+Gridsiswa.getValueAt(i, 5)+"')");
-                    try {
-                        sql="SELECT * FROM siswa WHERE "
-                                + "nis='" + Gridsiswa.getValueAt(i, 0) +"'";
-                        st=con.createStatement();
-                        RsSiswa=st.executeQuery(sql);
-                        while(RsSiswa.next()){
-                            try {
-                            st=con.createStatement();
-                            st.execute(sql);
-                            
-                            } catch (Exception err) {
-                                JOptionPane.showConfirmDialog(null, "Tidak Ada Barang Update!\n"+err.getMessage());
-                            }
-                        }
-                        }catch (Exception se) {
-                                JOptionPane.showConfirmDialog(null, "Data Tidak Ditemukan!!\n"+se.getMessage());
-                                txt_nisn.requestFocus();
-                                }
-                        i++;
-                        
-                    } //JOptionPane.showMessageDialog(rootPane, "Berhasil Disimpan!");
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(rootPane, "Gagal Menyimpan ! ERROR : \n"+e);
-                }
-            }
-        }*/
+    public void simpanData(){
+    try{
+        koneksi konek = new koneksi();
+        konek.config();
+        Statement stmt = konek.con.createStatement();
+        Statement stmt1 = konek.con.createStatement();
+        String user = txt_pengguna.getText();
+        String sql2 = "delete from siswa where nis='" + user + "'";
+        stmt1.executeUpdate(sql2);
+        stmt1.close();
+        String sql1 = "insert into siswa(nis, nisn, nama, alamat, status, pengguna)"
+                + "values('"
+                +txt_nis.getText()+"','"+txt_nisn.getText()+"','"+txt_nama.getText()+"','"+txt_alamat.getText()+"','"+txt_status.getText()+"','"+txt_pengguna.getText()+"')";
+        stmt.executeUpdate(sql1);
+        stmt.close();
+        JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
+        clearData();
+        refreshTable();
+        disableData();
+    }catch (Exception e){
+        System.out.println(e);
+    }
+}
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -677,38 +688,14 @@ private String nis, nisn, nama, alamat, status, pengguna;
 
     private void btn_SimpanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_SimpanKeyPressed
         // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            simpanData();
+        }
     }//GEN-LAST:event_btn_SimpanKeyPressed
 
     private void btn_SimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SimpanActionPerformed
         // TODO add your handling code here:
-        nis = String.valueOf(txt_nis.getText());
-        nisn = String.valueOf(txt_nisn.getText());
-        nama = String.valueOf(txt_nama.getText());
-        alamat = String.valueOf(txt_alamat.getText());
-        status = String.valueOf(txt_alamat.getText());
-        pengguna = String.valueOf(txt_pengguna.getText());
-        try {
-            sql="INSERT INTO siswa (nis, "
-            + "nisn, "
-            + "nama, "
-            + "alamat, "
-            + "status, "
-            + "pengguna)VALUES"
-            + "('"+ nis +"',"
-            + "'"+ nisn +"',"
-            + "'"+ nama +"',"
-            + "'"+ alamat +"',"
-            + "'"+ status +"',"
-            + "'"+ pengguna +"')";
-            st=con.createStatement();
-            st.execute(sql);
-            tampildata("Select * from siswa");
-            form_awal();
-            JOptionPane.showMessageDialog(null,
-                "Data Tersimpan");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan \n"+e.getMessage());
-        }
+        simpanData(); 
     }//GEN-LAST:event_btn_SimpanActionPerformed
 
     private void btn_KembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_KembaliActionPerformed
@@ -803,47 +790,6 @@ private String nis, nisn, nama, alamat, status, pengguna;
         }
     }
 
-/*public void simpanData(){
-    try{
-        koneksi konek = new koneksi();
-        konek.config();
-        Statement stmt = konek.con.createStatement();
-        Statement stmt1 = konek.con.createStatement();
-        String user = txt_nis.getText();
-        String sql2 = "delete from siswa where nis='" + user + "'";
-        stmt1.executeUpdate(sql2);
-        stmt1.close();
-        String sql1 = "insert into siswa(nis, nisn, nama, alamat, status, pengguna)"
-                + "values('"
-                +txt_nis.getText()+"','"+txt_nisn.getText()+"','"
-                +txt_nama.getText()+"','"+txt_alamat.getText()+"','"+"','"+txt_status.getText()+"','"+txt_pengguna.getText()+"')";
-        stmt.executeUpdate(sql1);
-        stmt.close();
-        JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
-        clearData();
-        refreshTable();
-        disableData();
-    }catch (Exception e){
-        System.out.println(e);
-    }
-}*/
-public void deleteData(){
-try{
-    koneksi konek = new koneksi();
-    konek.config();
-    String user = txt_nis.getText();
-    Statement stmt = konek.con.createStatement();
-    String sql = "delete from siswa where nis='" + user + "'";
-    stmt.executeUpdate(sql);
-    stmt.close();
-    JOptionPane.showMessageDialog(null, "Delete User Sukses");
-    clearData();
-    refreshTable();
-    disableData();
-}catch (Exception e){
-     System.out.println(e);
-}
-}
     /**
      * @param args the command line arguments
      */

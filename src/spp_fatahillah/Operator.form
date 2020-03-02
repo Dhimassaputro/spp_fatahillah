@@ -215,6 +215,9 @@
                   </Table>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="GridoperatorMousePressed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -232,6 +235,7 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Btn_simpanActionPerformed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="Btn_simpanKeyPressed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Btn_batal">
@@ -248,6 +252,7 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Btn_hapusActionPerformed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="Btn_hapusKeyPressed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Btn_kembali">

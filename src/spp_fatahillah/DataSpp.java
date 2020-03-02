@@ -295,10 +295,12 @@ private void tampildata(String sql){
         btn_Batal.setEnabled(false);
         btn_Hapus.setEnabled(false);
     }
+    
     private void form_disable(){
         txt_spp.setEnabled(false);
         txt_biaya.setEnabled(false);
-       }
+    }
+    
     public void disableData(){
     txt_spp.setEnabled(false);
     txt_biaya.setEnabled(false);
@@ -310,6 +312,7 @@ private void tampildata(String sql){
     btn_Keluar.setEnabled(false);
     btn_Tambah.requestFocus();
     }
+    
     public void enableData(){
     txt_spp.setEnabled(true);
     txt_biaya.setEnabled(true);
@@ -320,15 +323,17 @@ private void tampildata(String sql){
     btn_Batal.setEnabled(true);
     btn_Keluar.setEnabled(true);
     }
+    
     public void clearData(){
     txt_spp.setText("");
     txt_biaya.setText("");
     txt_spp.requestFocus();
     }
-private void form_clear(){
+    private void form_clear(){
         txt_spp.setText("");
         txt_biaya.setText("");
-       }
+      }
+    
 public void refreshTable(){
     try{
         koneksi konek = new  koneksi();

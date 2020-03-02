@@ -5,11 +5,14 @@
  */
 package spp_fatahillah;
 
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,68 +36,6 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         tampildata("SELECT * FROM operator");
     }
 
-    private void form_awal(){
-        form_disable();
-        form_clear(); 
-        Btn_simpan.setText("Simpan");
-        Btn_tambah.requestFocus(true);
-        Btn_tambah.setEnabled(true);
-        Btn_simpan.setEnabled(false);
-        Btn_batal.setEnabled(false);
-        Btn_hapus.setEnabled(false);   
-    }
-    
-    private void form_disable(){
-        txt_pengguna.setEnabled(false);
-        txt_sandi.setEnabled(false);
-        txt_nama.setEnabled(false);
-        txt_tipe.setEnabled(false);
-        txt_status.setEnabled(false);
-        txt_pembuat.setEnabled(false);
-    }
-    
-    private void form_enable(){
-        txt_pengguna.setEnabled(true);
-        txt_sandi.setEnabled(true);
-        txt_nama.setEnabled(true);
-        txt_tipe.setEnabled(true);
-        txt_status.setEnabled(true);
-        txt_pembuat.setEnabled(true);
-    }
-    
-    private void form_clear(){
-       txt_pengguna.setText("");
-       txt_sandi.setText("");
-       txt_nama.setText("");
-       txt_tipe.setText("");
-       txt_status.setText("");
-       txt_pembuat.setText("");
-    }
-    
-    private void aksi_tambah(){
-        form_enable();
-        Btn_tambah.setEnabled(true);
-        Btn_simpan.setEnabled(true);
-        Btn_batal.setEnabled(true);
-        Btn_hapus.setEnabled(false);
-        Btn_tambah.setEnabled(true);
-        
-        txt_pengguna.setEnabled(true);
-        txt_pengguna.requestFocus(true);
-    }
-    
-    private void koneksitabel (){
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql:"
-                    + "//localhost:3306/pembayaran", "root", "");
-            System.out.println("KONEKSI BERHASIL");
-            JOptionPane.showMessageDialog(null, "SELAMAT DATANG");  
-        } catch (Exception e) {
-            System.out.println("KONEKSI GAGAL \n"+e);
-        }
-    }
-    
     private void tampildata(String sql){
         DefaultTableModel datalist = new DefaultTableModel();
         datalist.addColumn("No");
@@ -118,8 +59,183 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
+        } 
+    }
+    
+    private void form_awal(){
+        form_disable();
+        form_clear(); 
+        Btn_simpan.setText("Simpan");
+        Btn_tambah.requestFocus(true);
+        Btn_tambah.setEnabled(true);
+        Btn_simpan.setEnabled(false);
+        Btn_batal.setEnabled(false);
+        Btn_hapus.setEnabled(false);   
+    }
+    
+    private void form_disable(){
+        txt_pengguna.setEnabled(false);
+        txt_sandi.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_tipe.setEnabled(false);
+        txt_status.setEnabled(false);
+        txt_pembuat.setEnabled(false);
+    }
+    
+    public void disableData(){
+        txt_pengguna.setEnabled(false);
+        txt_sandi.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_tipe.setEnabled(false);
+        txt_status.setEnabled(false);
+        txt_pembuat.setEnabled(false);
+        Btn_tambah.setEnabled(true);
+        Btn_kembali.setEnabled(false);
+        Btn_simpan.setEnabled(false);
+        Btn_hapus.setEnabled(false);
+        Btn_batal.setEnabled(false);
+        Btn_tambah.requestFocus();
+    }
+    
+    public void enableData(){
+        txt_pengguna.setEnabled(true);
+        txt_sandi.setEnabled(true);
+        txt_nama.setEnabled(true);
+        txt_tipe.setEnabled(true);
+        txt_status.setEnabled(true);
+        txt_pembuat.setEnabled(true);
+        Btn_tambah.setEnabled(false);
+        Btn_kembali.setEnabled(true);
+        Btn_simpan.setEnabled(true);
+        Btn_hapus.setEnabled(true);
+        Btn_batal.setEnabled(true);
+    }
+    
+    public void clearData(){
+        txt_pengguna.setText("");
+        txt_sandi.setText("");
+        txt_nama.setText("");
+        txt_tipe.setText("");
+        txt_status.setText("");
+        txt_pembuat.setText("");
+        txt_pengguna.requestFocus();
+    }
+    
+    private void form_clear(){
+       txt_pengguna.setText("");
+       txt_sandi.setText("");
+       txt_nama.setText("");
+       txt_tipe.setText("");
+       txt_status.setText("");
+       txt_pembuat.setText("");
+    }
+    
+    public void refreshTable(){
+    try{
+        koneksi konek = new  koneksi();
+        konek.config();
+        Statement stmtTable = konek.con.createStatement();
+        String sqlTabel = "select * from operator order by pengguna";
+        ResultSet rs = stmtTable.executeQuery(sqlTabel);
+        ResultSetMetaData meta = rs.getMetaData();
+        String Header[] = {"Pengguna","Sandi","Nama","Tipe","Status","Pembuat"};
+        int col = meta.getColumnCount();
+        int brs = 0;
+        while (rs.next()){
+            brs = rs.getRow();
         }
+        Object dataTable[][] = new Object[brs][col];
+        int x = 0;
+        rs.beforeFirst();
+        while(rs.next()){
+            dataTable[x][0]=rs.getString("pengguna");
+            dataTable[x][1]=rs.getString("sandi");
+            dataTable[x][2]=rs.getString("nama");
+            dataTable[x][3]=rs.getString("tipe");
+            dataTable[x][4]=rs.getString("status");
+            dataTable[x][5]=rs.getString("pembuat");
+            x++;  
+        }
+        Gridoperator.setModel(new DefaultTableModel(dataTable,Header));
+        stmtTable.close();
+    }catch(Exception ert) {
+        System.out.println(ert.getMessage());
+    }
+}
+    
+    private void form_enable(){
+        txt_pengguna.setEnabled(true);
+        txt_sandi.setEnabled(true);
+        txt_nama.setEnabled(true);
+        txt_tipe.setEnabled(true);
+        txt_status.setEnabled(true);
+        txt_pembuat.setEnabled(true);
+    }
+    
+    private void aksi_tambah(){
+        form_enable();
+        Btn_tambah.setEnabled(true);
+        Btn_simpan.setEnabled(true);
+        Btn_batal.setEnabled(true);
+        Btn_hapus.setEnabled(false);
+        Btn_tambah.setEnabled(true);
         
+        txt_pengguna.setEnabled(true);
+        txt_pengguna.requestFocus(true);
+    }
+    
+     public void deleteData(){
+        try{
+            koneksi konek = new koneksi();
+            konek.config();
+            String user = txt_pengguna.getText();
+            Statement stmt = konek.con.createStatement();
+            String sql = "delete from operator where pengguna='" + user + "'";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            JOptionPane.showMessageDialog(null, "Delete User Sukses");
+            clearData();
+            refreshTable();
+            disableData();
+        } catch (Exception e){
+            System.out.println(e);
+    }
+}
+
+     public void simpanData(){
+    try{
+        koneksi konek = new koneksi();
+        konek.config();
+        Statement stmt = konek.con.createStatement();
+        Statement stmt1 = konek.con.createStatement();
+        String user = txt_pengguna.getText();
+        String sql2 = "delete from operator where pengguna='" + user + "'";
+        stmt1.executeUpdate(sql2);
+        stmt1.close();
+        String sql1 = "insert into operator(pengguna, sandi, nama, tipe, status, pembuat)"
+                + "values('"
+                +txt_pengguna.getText()+"','"+txt_sandi.getText()+"','"+txt_nama.getText()+"','"+txt_tipe.getText()+"','"+txt_status.getText()+"','"+txt_pembuat.getText()+"')";
+        stmt.executeUpdate(sql1);
+        stmt.close();
+        JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
+        clearData();
+        refreshTable();
+        disableData();
+    }catch (Exception e){
+        System.out.println(e);
+    }
+}
+    
+    private void koneksitabel (){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con=DriverManager.getConnection("jdbc:mysql:"
+                    + "//localhost:3306/pembayaran", "root", "");
+            System.out.println("KONEKSI BERHASIL");
+            JOptionPane.showMessageDialog(null, "SELAMAT DATANG");  
+        } catch (Exception e) {
+            System.out.println("KONEKSI GAGAL \n"+e);
+        }
     }
     
     /**
@@ -190,6 +306,11 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Gridoperator.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GridoperatorMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(Gridoperator);
 
         Btn_tambah.setText("Tambah");
@@ -205,6 +326,11 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
                 Btn_simpanActionPerformed(evt);
             }
         });
+        Btn_simpan.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Btn_simpanKeyPressed(evt);
+            }
+        });
 
         Btn_batal.setText("Batal");
         Btn_batal.addActionListener(new java.awt.event.ActionListener() {
@@ -217,6 +343,11 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         Btn_hapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Btn_hapusActionPerformed(evt);
+            }
+        });
+        Btn_hapus.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Btn_hapusKeyPressed(evt);
             }
         });
 
@@ -339,35 +470,8 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
 
     private void Btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_simpanActionPerformed
         // TODO add your handling code here:
-        pengguna = String.valueOf(txt_pengguna.getText());
-        sandi = String.valueOf(txt_sandi.getText());
-        nama = String.valueOf(txt_nama.getText());
-        tipe = String.valueOf(txt_tipe.getText());
-        status = String.valueOf(txt_status.getText());
-        pembuat = String.valueOf(txt_pembuat.getText());
-        try {
-            sql="INSERT INTO operator(pengguna, "
-            + "sandi, "
-            + "nama, "
-            + "tipe, "
-            + "status, "
-            + "pembuat)VALUES"
-            + "('"+ pengguna +"',"
-            + "'"+ sandi +"',"
-            + "'"+ nama +"',"
-            + "'"+ tipe +"',"
-            + "'"+ status +"',"
-            + "'"+ pembuat +"')";
-            st=con.createStatement();
-            st.execute(sql);
-            tampildata("Select * from operator");
-            form_awal();
-            JOptionPane.showMessageDialog(null,
-                "Data Tersimpan");
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan \n"+e.getMessage());
-        }
+        simpanData();
+        
     }//GEN-LAST:event_Btn_simpanActionPerformed
 
     private void txt_penggunaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_penggunaKeyPressed
@@ -410,7 +514,8 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
 
     private void Btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_hapusActionPerformed
         // TODO add your handling code here:
-        pengguna=String.valueOf(txt_pengguna.getText());
+       deleteData();
+        /* pengguna=String.valueOf(txt_pengguna.getText());
 
         try {
             sql= "delete from operator where pengguna = '"+pengguna+"'";
@@ -423,7 +528,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
             txt_pengguna.requestFocus();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Data Gagal Dihapus \n"+e.getMessage());
-        }
+        }*/
     }//GEN-LAST:event_Btn_hapusActionPerformed
 
     private void Btn_batalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_batalActionPerformed
@@ -443,6 +548,35 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         lg.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Btn_kembaliActionPerformed
+
+    private void Btn_hapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Btn_hapusKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            deleteData();
+        }
+    }//GEN-LAST:event_Btn_hapusKeyPressed
+
+    private void GridoperatorMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GridoperatorMousePressed
+        // TODO add your handling code here:
+        JTable table = (JTable)evt.getSource();
+        int row = table.getSelectedRow();
+        String user = txt_pengguna.getText();
+        txt_pengguna.setText((String)table.getValueAt(row, 0));
+        txt_sandi.setText((String)table.getValueAt(row, 1));
+        txt_nama.setText((String)table.getValueAt(row, 2));
+        txt_tipe.setText((String)table.getValueAt(row, 3));
+        txt_status.setText((String)table.getValueAt(row, 4));
+        txt_pembuat.setText((String)table.getValueAt(row, 5));
+        user = txt_pengguna.getText();
+        enableData();
+    }//GEN-LAST:event_GridoperatorMousePressed
+
+    private void Btn_simpanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Btn_simpanKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            simpanData();
+        }
+    }//GEN-LAST:event_Btn_simpanKeyPressed
 
     /**
      * @param args the command line arguments
