@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.awt.Toolkit;
+import java.sql.DriverManager;
 import java.util.Map;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -43,24 +44,224 @@ private String nis, nisn, nama, alamat, status, pengguna;
      */
     public siswaa() {
         initComponents();
-        initTable();
+        //initTable();
+        koneksitabel();
+        tampildata("SELECT * FROM siswa");
     }
     
-    public void initTable()
+   /* public void initTable()
     {
-        Object[] columnNames = { "No",
+        Object[] columnNames = { 
                                     "NIS", 
                                     "NISN",
                                     "Nama",
                                     "Alamat",
                                     "Status",
-                                    "Pengguna"};
+                                    "Pengguna",
+                                    "Dibuat",
+                                    "Diubah",
+                                    };
         
         DefaultTableModel model =  new DefaultTableModel();
         tabModel = new DefaultTableModel(null, columnNames);
         Gridsiswa.setModel(tabModel);
-    }
+    }*/
 
+    private void form_awal(){
+        form_disable();
+        form_clear(); 
+        btn_Simpan.setText("Simpan");
+        btn_Tambah.requestFocus(true);
+        btn_Tambah.setEnabled(true);
+        btn_Simpan.setEnabled(false);
+        btn_Batal.setEnabled(false);
+        btn_Hapus.setEnabled(false);
+    }
+    
+    private void form_disable(){
+        txt_nis.setEnabled(false);
+        txt_nisn.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_alamat.setEnabled(false);
+        txt_status.setEnabled(false);
+        txt_pengguna.setEnabled(false);
+    }
+    
+    private void form_enable(){
+        txt_nis.setEnabled(false);
+        txt_nisn.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_alamat.setEnabled(false);
+        txt_status.setEnabled(false);
+        txt_pengguna.setEnabled(false);
+    }
+    
+    private void form_clear(){
+       txt_nis.setText("");
+       txt_nisn.setText("");
+       txt_nama.setText("");
+       txt_alamat.setText("");
+       txt_status.setText("");
+       txt_pengguna.setText("");
+    }
+    
+    public void disableData(){
+        txt_nis.setEnabled(false);
+        txt_nisn.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_alamat.setEnabled(false);
+        txt_status.setEnabled(false);
+        txt_pengguna.setEnabled(false);
+        btn_Tambah.setEnabled(true);
+        btn_Kembali.setEnabled(false);
+        btn_Simpan.setEnabled(false);
+        btn_Hapus.setEnabled(false);
+        btn_Batal.setEnabled(false);
+        btn_Keluar.setEnabled(false);
+        btn_Tambah.requestFocus();
+    }
+    
+    public void enableData(){
+        txt_nis.setEnabled(true);
+        txt_nisn.setEnabled(true);
+        txt_nama.setEnabled(true);
+        txt_alamat.setEnabled(true);
+        txt_status.setEnabled(true);
+        txt_pengguna.setEnabled(true);
+        btn_Tambah.setEnabled(false);
+        btn_Kembali.setEnabled(true);
+        btn_Simpan.setEnabled(true);
+        btn_Hapus.setEnabled(true);
+        btn_Batal.setEnabled(true);
+        btn_Keluar.setEnabled(true);
+    }
+    
+    public void clearData(){
+        txt_nis.setText("");
+        txt_nisn.setText("");
+        txt_nama.setText("");
+        txt_alamat.setText("");
+        txt_status.setText("");
+        txt_pengguna.setText("");
+        txt_nis.requestFocus();
+    }
+    
+    private void koneksitabel (){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con=DriverManager.getConnection("jdbc:mysql:"
+                    + "//localhost:3306/pembayaran", "root", "");
+            System.out.println("KONEKSI BERHASIL");
+            JOptionPane.showMessageDialog(null, "SELAMAT DATANG");  
+        } catch (Exception e) {
+            System.out.println("KONEKSI GAGAL \n"+e);
+        }
+    }
+    
+    private void tampildata(String sql){
+        DefaultTableModel datalist = new DefaultTableModel();
+        
+        datalist.addColumn("NIS");
+        datalist.addColumn("NISN");
+        datalist.addColumn("Nama Siswa");
+        datalist.addColumn("Alamat");
+        datalist.addColumn("Status");
+        datalist.addColumn("Pengguna");
+        
+        try {
+            int i = 1;
+            st = con.createStatement();
+            RsSiswa = st.executeQuery("SELECT * FROM siswa");
+            while (RsSiswa.next()){
+                datalist.addRow(new Object[]{
+                    (""+i++),RsSiswa.getString(1), RsSiswa.getString(2), 
+                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5) 
+                });
+                Gridsiswa.setModel(datalist);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
+        }
+    }
+    
+    public void refreshTable(){
+        try{
+            koneksi konek = new  koneksi();
+            konek.config();
+            Statement stmtTable = konek.con.createStatement();
+            String sqlTabel = "select * from siswa order by nis";
+            ResultSet rs = stmtTable.executeQuery(sqlTabel);
+            ResultSetMetaData meta = rs.getMetaData();
+            String Header[] = {"NIS","NISN","Nama","Alamat","Status","Pengguna"};
+            int col = meta.getColumnCount();
+            int brs = 0;
+            while (rs.next()){
+                brs = rs.getRow();
+           }
+            Object dataTable[][] = new Object[brs][col];
+            int x = 0;
+            rs.beforeFirst();
+            while(rs.next()){
+                dataTable[x][0]=rs.getString("nis");
+                dataTable[x][1]=rs.getString("nisn");
+                dataTable[x][2]=rs.getString("nama");
+                dataTable[x][3]=rs.getString("alamat");
+                dataTable[x][4]=rs.getString("status");
+                dataTable[x][5]=rs.getString("pengguna");
+            
+                x++;  
+            }
+        Gridsiswa.setModel(new DefaultTableModel(dataTable,Header));
+        stmtTable.close();
+    }catch(Exception ert) {
+        System.out.println(ert.getMessage());
+    }
+}
+
+    /*private void simpandetail(){
+            int jumlah_baris = Gridsiswa.getRowCount();
+            if(jumlah_baris == 0){
+                JOptionPane.showMessageDialog(rootPane, "Tabel Masih Kosong!");
+            }else{
+                try {
+                    int i=0;
+                    while(i < jumlah_baris){
+                        st.executeUpdate("insert into siswa"
+                        + "(nis,nisn,nama,alamat,status,pengguna) "
+                        + "values('"+txt_nis.getText() +"', "
+                        + "'"+Gridsiswa.getValueAt(i, 0)+"',"
+                        + "'"+Gridsiswa.getValueAt(i, 1)+"',"
+                        + "'"+Gridsiswa.getValueAt(i, 2)+"',"
+                        + "'"+Gridsiswa.getValueAt(i, 3)+"',"
+                        + "'"+Gridsiswa.getValueAt(i, 4)+"',"
+                        + "'"+Gridsiswa.getValueAt(i, 5)+"')");
+                    try {
+                        sql="SELECT * FROM siswa WHERE "
+                                + "nis='" + Gridsiswa.getValueAt(i, 0) +"'";
+                        st=con.createStatement();
+                        RsSiswa=st.executeQuery(sql);
+                        while(RsSiswa.next()){
+                            try {
+                            st=con.createStatement();
+                            st.execute(sql);
+                            
+                            } catch (Exception err) {
+                                JOptionPane.showConfirmDialog(null, "Tidak Ada Barang Update!\n"+err.getMessage());
+                            }
+                        }
+                        }catch (Exception se) {
+                                JOptionPane.showConfirmDialog(null, "Data Tidak Ditemukan!!\n"+se.getMessage());
+                                txt_nisn.requestFocus();
+                                }
+                        i++;
+                        
+                    } //JOptionPane.showMessageDialog(rootPane, "Berhasil Disimpan!");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(rootPane, "Gagal Menyimpan ! ERROR : \n"+e);
+                }
+            }
+        }*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -327,9 +528,9 @@ private String nis, nisn, nama, alamat, status, pengguna;
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txt_cetak, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btn_Tambah))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_cetak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btn_Tambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_Kembali)
                                 .addGap(18, 18, 18)
@@ -476,14 +677,38 @@ private String nis, nisn, nama, alamat, status, pengguna;
 
     private void btn_SimpanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_SimpanKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            simpanData();
-        }
     }//GEN-LAST:event_btn_SimpanKeyPressed
 
     private void btn_SimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SimpanActionPerformed
         // TODO add your handling code here:
-        simpanData();
+        nis = String.valueOf(txt_nis.getText());
+        nisn = String.valueOf(txt_nisn.getText());
+        nama = String.valueOf(txt_nama.getText());
+        alamat = String.valueOf(txt_alamat.getText());
+        status = String.valueOf(txt_alamat.getText());
+        pengguna = String.valueOf(txt_pengguna.getText());
+        try {
+            sql="INSERT INTO siswa (nis, "
+            + "nisn, "
+            + "nama, "
+            + "alamat, "
+            + "status, "
+            + "pengguna)VALUES"
+            + "('"+ nis +"',"
+            + "'"+ nisn +"',"
+            + "'"+ nama +"',"
+            + "'"+ alamat +"',"
+            + "'"+ status +"',"
+            + "'"+ pengguna +"')";
+            st=con.createStatement();
+            st.execute(sql);
+            tampildata("Select * from siswa");
+            form_awal();
+            JOptionPane.showMessageDialog(null,
+                "Data Tersimpan");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Disimpan \n"+e.getMessage());
+        }
     }//GEN-LAST:event_btn_SimpanActionPerformed
 
     private void btn_KembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_KembaliActionPerformed
@@ -558,6 +783,7 @@ private String nis, nisn, nama, alamat, status, pengguna;
                     + "OR alamat like '%"+cari+"%' "
                     + "OR status like '%"+cari+"%' "
                     + "OR pengguna like '%"+cari+"%' "
+                    
                     + "order by kode asc";
             java.sql.Statement stmt=koneksi.createStatement();
             java.sql.ResultSet rslt=stmt.executeQuery(sql);
@@ -568,6 +794,7 @@ private String nis, nisn, nama, alamat, status, pengguna;
                 String alamat = rslt.getString("alamat");
                 String status = rslt.getString("status");
                 String pengguna = rslt.getString("pengguna");
+                
                 String[] dataField={nis, nisn, nama, alamat, status, pengguna};
                 tabModel.addRow(dataField);
             }
@@ -575,128 +802,8 @@ private String nis, nisn, nama, alamat, status, pengguna;
         catch(Exception ex){
         }
     }
-    private void tampildata(String sql){
-        DefaultTableModel datalist = new DefaultTableModel();
-        
-        datalist.addColumn("NIS");
-        datalist.addColumn("NISN");
-        datalist.addColumn("Nama Siswa");
-        datalist.addColumn("Alamat");
-        datalist.addColumn("Status");
-        datalist.addColumn("Pengguna");
-        try {
-            int i = 1;
-            st=con.createStatement();
-            RsSiswa=st.executeQuery("SELECT * FROM siswa");
-            while (RsSiswa.next()){
-                datalist.addRow(new Object[]{
-                    (""+i++),RsSiswa.getString(1), RsSiswa.getString(2), 
-                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5), RsSiswa.getString(6), RsSiswa.getString(7)
-                });
-                Gridsiswa.setModel(datalist);
-            }
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
-        }
-    }
-private void form_awal(){
-        form_disable();
-        form_clear(); 
-        btn_Simpan.setText("Simpan");
-        btn_Tambah.requestFocus(true);
-        btn_Tambah.setEnabled(true);
-        btn_Simpan.setEnabled(false);
-        btn_Batal.setEnabled(false);
-        btn_Hapus.setEnabled(false);
-    }
-private void form_disable(){
-        txt_nis.setEnabled(false);
-        txt_nisn.setEnabled(false);
-        txt_nama.setEnabled(false);
-        txt_alamat.setEnabled(false);
-        txt_status.setEnabled(false);
-        txt_pengguna.setEnabled(false);
-       }
-    public void disableData(){
-    txt_nis.setEnabled(false);
-    txt_nisn.setEnabled(false);
-    txt_nama.setEnabled(false);
-    txt_alamat.setEnabled(false);
-    txt_status.setEnabled(false);
-    txt_pengguna.setEnabled(false);
-    btn_Tambah.setEnabled(true);
-    btn_Kembali.setEnabled(false);
-    btn_Simpan.setEnabled(false);
-    btn_Hapus.setEnabled(false);
-    btn_Batal.setEnabled(false);
-    btn_Keluar.setEnabled(false);
-    btn_Tambah.requestFocus();
-}
-public void enableData(){
-    txt_nis.setEnabled(true);
-    txt_nisn.setEnabled(true);
-    txt_nama.setEnabled(true);
-    txt_alamat.setEnabled(true);
-    txt_status.setEnabled(true);
-    txt_pengguna.setEnabled(true);
-    btn_Tambah.setEnabled(false);
-    btn_Kembali.setEnabled(true);
-    btn_Simpan.setEnabled(true);
-    btn_Hapus.setEnabled(true);
-    btn_Batal.setEnabled(true);
-    btn_Keluar.setEnabled(true);
-}
-public void clearData(){
-    txt_nis.setText("");
-    txt_nisn.setText("");
-    txt_nama.setText("");
-    txt_alamat.setText("");
-    txt_status.setText("");
-    txt_pengguna.setText("");
-    txt_nis.requestFocus();
-}
-private void form_clear(){
-        txt_nis.setText("");
-        txt_nisn.setText("");
-        txt_nama.setText("");
-        txt_alamat.setText("");
-        txt_status.setText("");
-        txt_pengguna.setText("");
-       }
-public void refreshTable(){
-    try{
-        koneksi konek = new  koneksi();
-        konek.config();
-        Statement stmtTable = konek.con.createStatement();
-        String sqlTabel = "select * from siswa order by nis";
-        ResultSet rs = stmtTable.executeQuery(sqlTabel);
-        ResultSetMetaData meta = rs.getMetaData();
-        String Header[] = {"NIS","NISN","Nama","Alamat","Status","Pengguna"};
-        int col = meta.getColumnCount();
-        int brs = 0;
-        while (rs.next()){
-            brs = rs.getRow();
-        }
-        Object dataTable[][] = new Object[brs][col];
-        int x = 0;
-        rs.beforeFirst();
-        while(rs.next()){
-            dataTable[x][0]=rs.getString("nis");
-            dataTable[x][1]=rs.getString("nisn");
-            dataTable[x][2]=rs.getString("nama");
-            dataTable[x][3]=rs.getString("alamat");
-            dataTable[x][4]=rs.getString("status");
-            dataTable[x][5]=rs.getString("pengguna");
-            x++;  
-        }
-        Gridsiswa.setModel(new DefaultTableModel(dataTable,Header));
-        stmtTable.close();
-    }catch(Exception ert) {
-        System.out.println(ert.getMessage());
-    }
-}
-public void simpanData(){
+
+/*public void simpanData(){
     try{
         koneksi konek = new koneksi();
         konek.config();
@@ -719,7 +826,7 @@ public void simpanData(){
     }catch (Exception e){
         System.out.println(e);
     }
-}
+}*/
 public void deleteData(){
 try{
     koneksi konek = new koneksi();

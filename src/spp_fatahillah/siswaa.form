@@ -88,9 +88,9 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jScrollPane1" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="txt_cetak" min="-2" pref="69" max="-2" attributes="0"/>
-                                      <Component id="btn_Tambah" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="txt_cetak" max="32767" attributes="0"/>
+                                      <Component id="btn_Tambah" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btn_Kembali" min="-2" max="-2" attributes="0"/>
