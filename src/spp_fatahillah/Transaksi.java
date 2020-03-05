@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
@@ -44,14 +45,227 @@ public class Transaksi extends javax.swing.JFrame {
     private ResultSet RsSiswa;
     private ResultSet RsTransaksi;
     private ResultSet RsSpp;
-    private ResultSet RsDetail;
     private String sql="";
     
-    private int jumlahBayar = 0;
+    private int jumlahBayar = 0 ;
     
-    private String no, nis, nisn, nama, alamat, kelas, kodekelas;
-    private int biaya, bulan, jumlahbulan1, jumlahtotal, bayar, kembali;
+    private String no, nis, nisn, nama, kelas, pengguna;
+    private int biaya, kembali, bulan, tahun, jumlahtotal;
 
+    private void tampildata(String sql){
+        DefaultTableModel datalist = new DefaultTableModel();
+        datalist.addColumn("NIS");
+        datalist.addColumn("NISN");
+        datalist.addColumn("Nama");
+        datalist.addColumn("Kelas");
+        datalist.addColumn("Biaya");
+        datalist.addColumn("Pengguna");
+        datalist.addColumn("Kembali");
+        datalist.addColumn("Bulan");
+        datalist.addColumn("Tahun");
+        try {
+            int i = 0;
+            st=con.createStatement();
+            RsTransaksi=st.executeQuery("SELECT * FROM transaksi");
+            while (RsTransaksi.next()){
+                datalist.addRow(new Object[]{
+                    (""+i++), 
+                    RsTransaksi.getString(1), RsTransaksi.getString(2), RsTransaksi.getString(3), 
+                    RsTransaksi.getString(4), RsTransaksi.getString(5), RsTransaksi.getString(6), RsTransaksi.getString(7), RsTransaksi.getString(8)
+                });
+                Gridtransaksi.setModel(datalist);
+        }
+            } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
+        }
+    }
+    
+    private void form_awal(){
+        form_disable();
+        form_clear(); 
+        Btn_Simpan.setText("Simpan");
+        btn_tambah.requestFocus(true);
+        btn_tambah.setEnabled(true);
+        Btn_Simpan.setEnabled(false);
+        Btn_Batal.setEnabled(false);
+    }
+    
+    private void form_disable(){
+        txt_no.setEnabled(false);
+        txt_tanggal.setEnabled(false);
+        txt_nis.setEnabled(false);
+        txt_nisn.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_biaya.setEnabled(false);
+        txt_jumlah_transaksi.setEnabled(false);
+        txt_total.setEnabled(false);
+        txt_jumlahbayar.setEnabled(false);
+        txt_kembali.setEnabled(false);
+        
+        Cmb_kl.setEnabled(false);
+    }
+    
+    public void disableData(){
+        txt_no.setEnabled(false);
+        txt_tanggal.setEnabled(false);
+        txt_nis.setEnabled(false);
+        txt_nisn.setEnabled(false);
+        txt_nama.setEnabled(false);
+        txt_biaya.setEnabled(false);
+        txt_jumlah_transaksi.setEnabled(false);
+        txt_total.setEnabled(false);
+        txt_jumlahbayar.setEnabled(false);
+        txt_kembali.setEnabled(false);
+        Cmb_kl.setEnabled(false);
+        btn_tambah.setEnabled(true);
+        Btn_Kembali.setEnabled(false);
+        Btn_Simpan.setEnabled(false);
+        Btn_Batal.setEnabled(false);
+        btn_tambah.requestFocus();
+    }
+    
+    public void enableData(){
+        txt_no.setEnabled(true);
+        txt_tanggal.setEnabled(true);
+        txt_nis.setEnabled(true);
+        txt_nisn.setEnabled(true);
+        txt_nama.setEnabled(true);
+        txt_biaya.setEnabled(true);
+        txt_jumlah_transaksi.setEnabled(true);
+        txt_total.setEnabled(true);
+        txt_jumlahbayar.setEnabled(true);
+        txt_kembali.setEnabled(true);
+        Cmb_kl.setEnabled(true);
+        btn_tambah.setEnabled(false);
+        Btn_Kembali.setEnabled(true);
+        Btn_Simpan.setEnabled(true);
+        Btn_Batal.setEnabled(true);
+    }
+    
+    public void clearData(){
+        txt_no.setText(null);
+        txt_tanggal.setDate(null);
+        txt_nis.setText(null);
+        txt_nisn.setText(null);
+        txt_nama.setText(null);
+        txt_biaya.setText(null);
+        
+        txt_jumlahbayar.setText("");
+        txt_jumlah_transaksi.setText("");
+        txt_total.setText("");
+        txt_kembali.setText("");
+    }
+    
+    private void form_clear(){
+        txt_no.setText("");
+        txt_nis.setText("");
+        txt_nisn.setText("");
+        txt_nama.setText("");
+        txt_biaya.setText("");
+        
+        txt_jumlahbayar.setText("");
+        txt_jumlah_transaksi.setText("");
+        txt_total.setText("");
+        txt_kembali.setText("");
+
+        Cmb_kl.setSelectedItem("Pilih");
+    }
+    
+    public void refreshTable(){
+    try{
+        koneksi konek = new  koneksi();
+        konek.config();
+        Statement stmtTable = konek.con.createStatement();
+        String sqlTabel = "select * from transaksi order by nis";
+        ResultSet rs = stmtTable.executeQuery(sqlTabel);
+        ResultSetMetaData meta = rs.getMetaData();
+        String Header[] = {"NIS","NISN","Nama","Kelas","Biaya","Pengguna","Kembali","Bulan","Tahun"};
+        int col = meta.getColumnCount();
+        int brs = 0;
+        while (rs.next()){
+            brs = rs.getRow();
+        }
+        Object dataTable[][] = new Object[brs][col];
+        int x = 0;
+        rs.beforeFirst();
+        while(rs.next()){
+            dataTable[x][0]=rs.getString("nis");
+            dataTable[x][1]=rs.getString("nisn");
+            dataTable[x][2]=rs.getString("nama");
+            dataTable[x][3]=rs.getString("kode_kelas");
+            dataTable[x][4]=rs.getString("biaya");
+            dataTable[x][5]=rs.getString("pengguna");
+            dataTable[x][6]=rs.getString("kembali");
+            dataTable[x][7]=rs.getString("bulan");
+            dataTable[x][8]=rs.getString("tahun");
+            x++;  
+        }
+        Gridtransaksi.setModel(new DefaultTableModel(dataTable,Header));
+        stmtTable.close();
+    }catch(Exception ert) {
+        System.out.println(ert.getMessage());
+    }
+}
+ 
+    private void form_enable(){
+        txt_no.setEnabled(true);
+        txt_tanggal.setEnabled(true);
+        txt_nis.setEnabled(true);
+        txt_nisn.setEnabled(true);
+        txt_nama.setEnabled(true);
+        txt_biaya.setEnabled(true);
+        txt_jumlah_transaksi.setEnabled(true);
+        txt_total.setEnabled(true);
+        txt_jumlahbayar.setEnabled(true);
+        txt_kembali.setEnabled(true);
+        Cmb_kl.setEnabled(true);
+    }
+    
+    private void aksi_tambah(){
+        form_enable();
+        Btn_Tambah.setEnabled(true);
+        Btn_Kurang.setEnabled(true);
+        Btn_Simpan.setEnabled(true);
+        Btn_Batal.setEnabled(true);
+        txt_no.requestFocus(true);
+        txt_no.setEnabled(true);
+    }
+    
+    public void simpanData(){
+        try{
+            koneksi konek = new koneksi();
+            konek.config();
+            Statement stmt = konek.con.createStatement();
+            Statement stmt1 = konek.con.createStatement();
+            String user = txt_nis.getText();
+            String sql2 = "delete from transaksi where nis='" + user + "'";
+            stmt1.executeUpdate(sql2);
+            stmt1.close();
+            String sql1 = "insert into transaksi(nis, nisn, nama, kode_kelas, biaya, pengguna, kembali, bulan, tahun)"
+                + "values('"
+                +txt_nis.getText()+"','"+txt_nisn.getText()+"','"+txt_nama.getText()+"','"+txt_biaya.getText()+"','"+txt_kembali.getText()+",)";
+            stmt.executeUpdate(sql1);
+            stmt.close();
+            JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
+            clearData();
+            refreshTable();
+            disableData();
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+    
+    private void koneksitabel (){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con=DriverManager.getConnection("jdbc:mysql:"
+                    + "//localhost:3306/pembayaran", "root", "");
+            System.out.println("KONEKSI BERHASIL");
+        } catch (Exception e) {
+            System.out.println("KONEKSI GAGAL \n"+e);
+        }
+    }
+    
     public Transaksi() {
         try {
             initComponents();
@@ -75,7 +289,7 @@ public class Transaksi extends javax.swing.JFrame {
         }
     }
     
-    public void pencarian_transaksi(){
+    /*public void pencarian_transaksi(){
         String cari = txt_cari.getText();
         Object[] Baris={"NIS","Tanggal","Kelas","Biaya","Pengguna","Kembali","Bulan","Tahun"};
         tabmode = new DefaultTableModel(null, Baris);
@@ -91,7 +305,7 @@ public class Transaksi extends javax.swing.JFrame {
                     + "OR kembali like '%"+cari+"%' "
                     + "OR bulan like '%"+cari+"%' "
                     + "OR tahun like '%"+cari+"%' "
-                    + "order by no asc";
+                    + "order by nis asc";
             java.sql.Statement stmt=koneksi.createStatement();
             java.sql.ResultSet rslt=stmt.executeQuery(sql);
             while(rslt.next()){
@@ -109,108 +323,8 @@ public class Transaksi extends javax.swing.JFrame {
         }
         catch(Exception ex){
         }
-    }
-    
-    private void form_awal(){
-        form_disable();
-        form_clear(); 
-        Btn_Simpan.setText("Simpan");
-        Btn_Tambah.setEnabled(true);
-        Btn_Simpan.setEnabled(false);
-    }
-     
-    private void form_disable(){
-        txt_nisn.setEnabled(false);
-        txt_nama.setEnabled(false);
-        txt_biaya.setEnabled(false);
-        
-        Cmb_kl.setEnabled(false);
-    }
-    
-    private void form_enable(){
-        txt_no.setEnabled(true);
-        txt_nis.setEnabled(true);
-        txt_nisn.setEnabled(true);
-        txt_nama.setEnabled(true);
-        txt_biaya.setEnabled(true);
-        Cmb_kl.setEnabled(true);
-    }
-    
-    public void clearData(){
-        txt_no.setText(null);
-        txt_nis.setText(null);
-        txt_nisn.setText(null);
-        txt_nama.setText(null);
-        txt_biaya.setText(null);
-        txt_total.setText(null);
-        
-        txt_jumlahbayar.setText("");
-        txt_jumlah_transaksi.setText("");
-        txt_total.setText("");
-        txt_kembali.setText("");
-    }
-    private void form_clear(){
-        txt_no.setText("");
-        txt_nisn.setText("");
-        txt_nama.setText("");
-        txt_biaya.setText("");
-        txt_total.setText("");
-        
-        txt_jumlahbayar.setText("");
-        txt_jumlah_transaksi.setText("");
-        txt_total.setText("");
-        txt_kembali.setText("");
+    }*/
 
-        Cmb_kl.setSelectedItem("Pilih");
-    }
-    private void aksi_tambah(){
-        form_enable();
-        Btn_Tambah.setEnabled(true);
-        Btn_Kurang.setEnabled(true);
-        Btn_Simpan.setEnabled(true);
-        Btn_Batal.setEnabled(true);
-        txt_no.requestFocus(true);
-    }
-    private void koneksitabel (){
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql:"
-                    + "//localhost:3306/pembayaran", "root", "");
-            System.out.println("KONEKSI BERHASIL");
-        } catch (Exception e) {
-            System.out.println("KONEKSI GAGAL \n"+e);
-        }
-    }
-    
-    private void tampildata(String sql){
-        DefaultTableModel datalist = new DefaultTableModel();
-        datalist.addColumn("No transaksi");
-        datalist.addColumn("Tanggal Transaksi");
-        datalist.addColumn("NIS");
-        datalist.addColumn("Kelas");
-        datalist.addColumn("Biaya");
-        datalist.addColumn("Pengguna");
-        datalist.addColumn("Kembali");
-        datalist.addColumn("Bulan");
-        datalist.addColumn("Tahun");
-        try {
-            int i = 0;
-            st=con.createStatement();
-            RsTransaksi=st.executeQuery("SELECT * FROM transaksi");
-            while (RsTransaksi.next()){
-                datalist.addRow(new Object[]{
-                    (""+i++), 
-                    RsTransaksi.getString(2), RsTransaksi.getString(1), RsTransaksi.getString(3), 
-                    RsTransaksi.getString(4), RsTransaksi.getString(5), RsTransaksi.getString(6), RsTransaksi.getString(7), 
-                    RsTransaksi.getString(8)
-                });
-                Gridtransaksi.setModel(datalist);
-        }
-            } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
-        }
-    }
-    
     private void DaftarSiswa(){
         try {
             String sql = "Select * FROM siswa";
@@ -261,7 +375,7 @@ public class Transaksi extends javax.swing.JFrame {
 }
     private void total(){
         int jumlahBaris = Gridspp.getRowCount();
-        int jumlahtotal =0, jumlahitem=0;
+        int jumlahtotal = 0, jumlahitem = 0;
         int jumlahbiaya, totalharga;
         
         TableModel tblmodel;
@@ -274,40 +388,44 @@ public class Transaksi extends javax.swing.JFrame {
         txt_jumlah_transaksi.setText(String.valueOf(jumlahitem));
         txt_total.setText(String.valueOf(jumlahtotal));
     }
-    
+
     private void simpandetail(){
             int jumlah_baris = Gridspp.getRowCount();
             if(jumlah_baris == 0){
                 JOptionPane.showMessageDialog(rootPane, "Tabel Masih Kosong!");
             }else{
                 try {
-                    int i=0;
+                    int i=1 ;
                     while(i < jumlah_baris){
-                        st.executeUpdate("insert into detailtransaksi"
-                        + "(NIS,biaya,jumlah,total) "
-                        + "values('"+txt_nis.getText() +"', "
+                        st.executeUpdate("insert into v_transaksi_pembayaran"
+                        + "(nis,kode_kelas,bulan,tahun,biaya) "
+                        + "values('"+txt_no.getText() +"', "
                         + "'"+Gridspp.getValueAt(i, 0)+"',"
                         + "'"+Gridspp.getValueAt(i, 1)+"',"
-                        + "'"+Gridspp.getValueAt(i, 2)+"')");
+                        + "'"+Gridspp.getValueAt(i, 2)+"',"
+			+ "'"+Gridspp.getValueAt(i, 3)+"',"
+                        + ","+Gridspp.getValueAt(i, 4)+"',");
                     try {
-                        sql="SELECT * FROM spp WHERE "
-                                + "kelas='" + Gridspp.getValueAt(i, 0) +"'";
+                        sql="SELECT * FROM transaksi WHERE "
+                                + "nis='" + Gridtransaksi.getValueAt(i, 0) +"'";
                         st=con.createStatement();
                         RsSpp=st.executeQuery(sql);
                         while(RsSpp.next()){
                             try {
+                               
                             st=con.createStatement();
                             st.execute(sql);
                             
                             } catch (Exception err) {
                                 JOptionPane.showConfirmDialog(null, "Tidak Ada Barang Update!\n"+err.getMessage());
+                                
                             }
                         }
-                        }catch (Exception se) {
+                        } catch (Exception se) {
                                 JOptionPane.showConfirmDialog(null, "Data Tidak Ditemukan!!\n"+se.getMessage());
-                                txt_nisn.requestFocus();
+                                txt_nis.requestFocus();
                                 }
-                        i++;
+                    i++;
                         
                     } //JOptionPane.showMessageDialog(rootPane, "Berhasil Disimpan!");
                 } catch (Exception e) {
@@ -316,18 +434,6 @@ public class Transaksi extends javax.swing.JFrame {
             }
         }
     
-    private void tampildetailtransaksi(String sql){
-        try {
-
-            Connection koneksi = new koneksii().getConnection();
-            java.sql.Statement st = koneksi.createStatement();
-            RsSiswa = st.executeQuery("SELECT bulan, biaya, dibuat FROM v_transaksi_pembayaran where NIS='"+ kelas +"'");
-            Gridspp.setModel(DbUtils.resultSetToTableModel(RsSiswa));
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
-        }     
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -380,7 +486,7 @@ public class Transaksi extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
         jLabel13.setText("NIS");
 
@@ -494,6 +600,11 @@ public class Transaksi extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Gridtransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GridtransaksiMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(Gridtransaksi);
 
         jLabel15.setText("No Transaksi");
@@ -780,8 +891,8 @@ public class Transaksi extends javax.swing.JFrame {
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
         // TODO add your handling code here:
-        form_enable();
-        clearData();
+        aksi_tambah();
+        txt_no.requestFocus();
     }//GEN-LAST:event_btn_tambahActionPerformed
 
     private void txt_nisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nisActionPerformed
@@ -803,12 +914,12 @@ public class Transaksi extends javax.swing.JFrame {
 
     private void btn_cariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cariMouseClicked
         // TODO add your handling code here:
-        pencarian_transaksi();
+        //pencarian_transaksi();
     }//GEN-LAST:event_btn_cariMouseClicked
 
     private void txt_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_cariActionPerformed
         // TODO add your handling code here:
-        pencarian_transaksi();
+        //pencarian_transaksi();
     }//GEN-LAST:event_txt_cariActionPerformed
 
     private void Btn_KeluarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Btn_KeluarKeyPressed
@@ -838,21 +949,22 @@ public class Transaksi extends javax.swing.JFrame {
     private void Btn_SimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_SimpanActionPerformed
         // TODO add your handling code here:
         String Tanggal , NIS;
-        int totalItem, total = 0, biaya = 0, pengguna = 0, kembali, bulan = 0, tahun = 0, dibuat = 0, totalBayar;
+        int totalItem, total, biaya, pengguna = 0, kembali, bulan = 0, tahun = 0, dibuat, totalBayar;
 
         nis=String.valueOf(txt_nis.getText());
         SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
         Tanggal=format.format(txt_tanggal.getDate());
-        kodekelas=Cmb_kl.getItemAt(Cmb_kl.getSelectedIndex()).toString();
+        kelas=Cmb_kl.getItemAt(Cmb_kl.getSelectedIndex()).toString();
 
         totalItem=Integer.parseInt(txt_jumlah_transaksi.getText());
-        bayar=Integer.parseInt(txt_jumlahbayar.getText());
+        biaya=Integer.parseInt(txt_jumlahbayar.getText());
         kembali=Integer.parseInt(txt_kembali.getText());
         totalBayar=Integer.parseInt(txt_total.getText());
         simpandetail();
         try {
-            sql="INSERT INTO transaksi(NIS, "
-            + "tanggal, "
+            sql="INSERT INTO transaksi(nis, "
+            + "nisn, "
+            + "nama, "
             + "kode_kelas, "
             + "biaya, "
             + "pengguna, "
@@ -861,14 +973,14 @@ public class Transaksi extends javax.swing.JFrame {
             + "tahun, "
             + "dibuat)VALUES"
             + "('"+ nis +"',"
-            + "'"+ Tanggal +"',"
-            + "'"+ kodekelas +"',"
+            + "'"+ nisn +"',"
+            + "'"+ nama +"',"
+            + "'"+ kelas +"',"
             + "'"+ biaya +"',"
             + "'"+ pengguna +"',"
             + "'"+ kembali +"',"
             + "'"+ bulan +"',"
-            + "'"+ tahun +"',"
-            + "'"+ dibuat +"')";
+            + "'"+ tahun +"')";
             st=con.createStatement();
             st.execute(sql);
             tampildata("Select * from transaksi");
@@ -878,6 +990,7 @@ public class Transaksi extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Data Gagal Disimpan \n"+e.getMessage());
         }
+        //simpanData();
     }//GEN-LAST:event_Btn_SimpanActionPerformed
 
     private void Btn_KembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_KembaliActionPerformed
@@ -934,8 +1047,8 @@ public class Transaksi extends javax.swing.JFrame {
     private void txt_jumlahbayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_jumlahbayarActionPerformed
         // TODO add your handling code here:
         jumlahtotal=Integer.parseInt(txt_total.getText());
-        bayar=Integer.parseInt(txt_jumlahbayar.getText());
-        kembali=bayar-jumlahtotal;
+        biaya=Integer.parseInt(txt_jumlahbayar.getText());
+        kembali=biaya-jumlahtotal;
         txt_kembali.setText(String.valueOf(kembali));
     }//GEN-LAST:event_txt_jumlahbayarActionPerformed
 
@@ -971,6 +1084,23 @@ public class Transaksi extends javax.swing.JFrame {
     private void txt_totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_totalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_totalActionPerformed
+
+    private void GridtransaksiMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GridtransaksiMousePressed
+        // TODO add your handling code here:
+        JTable table = (JTable)evt.getSource();
+        int row = table.getSelectedRow();
+        String user = txt_nis.getText();
+        txt_nis.setText((String)table.getValueAt(row, 0));
+        txt_nisn.setText((String)table.getValueAt(row, 1));
+        txt_nama.setText((String)table.getValueAt(row, 2));
+        txt_biaya.setText((String)table.getValueAt(row, 3));
+        txt_jumlahbayar.setText((String)table.getValueAt(row, 4));
+        txt_jumlah_transaksi.setText((String)table.getValueAt(row, 5));
+        txt_total.setText((String)table.getValueAt(row, 6));
+        txt_kembali.setText((String)table.getValueAt(row, 7));
+        user = txt_nis.getText();
+        enableData();
+    }//GEN-LAST:event_GridtransaksiMousePressed
 
     
     /**

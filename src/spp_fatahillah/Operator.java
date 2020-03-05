@@ -202,29 +202,29 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
     }
 }
 
-     public void simpanData(){
-    try{
-        koneksi konek = new koneksi();
-        konek.config();
-        Statement stmt = konek.con.createStatement();
-        Statement stmt1 = konek.con.createStatement();
-        String user = txt_pengguna.getText();
-        String sql2 = "delete from operator where pengguna='" + user + "'";
-        stmt1.executeUpdate(sql2);
-        stmt1.close();
-        String sql1 = "insert into operator(pengguna, sandi, nama, tipe, status, pembuat)"
+    public void simpanData(){
+        try{
+            koneksi konek = new koneksi();
+            konek.config();
+            Statement stmt = konek.con.createStatement();
+            Statement stmt1 = konek.con.createStatement();
+            String user = txt_pengguna.getText();
+            String sql2 = "delete from operator where pengguna='" + user + "'";
+            stmt1.executeUpdate(sql2);
+            stmt1.close();
+            String sql1 = "insert into operator(pengguna, sandi, nama, tipe, status, pembuat)"
                 + "values('"
                 +txt_pengguna.getText()+"','"+txt_sandi.getText()+"','"+txt_nama.getText()+"','"+txt_tipe.getText()+"','"+txt_status.getText()+"','"+txt_pembuat.getText()+"')";
-        stmt.executeUpdate(sql1);
-        stmt.close();
-        JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
-        clearData();
-        refreshTable();
-        disableData();
-    }catch (Exception e){
-        System.out.println(e);
+            stmt.executeUpdate(sql1);
+            stmt.close();
+            JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
+            clearData();
+            refreshTable();
+            disableData();
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
-}
     
     private void koneksitabel (){
         try {
