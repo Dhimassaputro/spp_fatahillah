@@ -45,11 +45,11 @@ public class Transaksi extends javax.swing.JFrame {
     private ResultSet RsSiswa;
     private ResultSet RsTransaksi;
     private ResultSet RsSpp;
-    private String sql="";
+    private String sql = "";
     
     private int jumlahBayar = 0 ;
     
-    private String no, nis, nisn, nama, kelas, pengguna;
+    private String no, nis, nisn, nama, kelas, pengguna, dibuat;
     private int biaya, kembali, bulan, tahun, jumlahtotal;
 
     private void tampildata(String sql){
@@ -66,12 +66,13 @@ public class Transaksi extends javax.swing.JFrame {
         try {
             int i = 0;
             st=con.createStatement();
-            RsTransaksi=st.executeQuery("SELECT * FROM transaksi");
+            RsTransaksi = st.executeQuery("SELECT * FROM transaksi");
             while (RsTransaksi.next()){
                 datalist.addRow(new Object[]{
                     (""+i++), 
                     RsTransaksi.getString(1), RsTransaksi.getString(2), RsTransaksi.getString(3), 
-                    RsTransaksi.getString(4), RsTransaksi.getString(5), RsTransaksi.getString(6), RsTransaksi.getString(7), RsTransaksi.getString(8)
+                    RsTransaksi.getString(4), RsTransaksi.getString(5), RsTransaksi.getString(6), 
+                    RsTransaksi.getString(7), RsTransaksi.getString(8)
                 });
                 Gridtransaksi.setModel(datalist);
         }
@@ -382,7 +383,7 @@ public class Transaksi extends javax.swing.JFrame {
         tblmodel = Gridspp.getModel();
         for (int i=0; i<jumlahBaris; i++){
             jumlahbiaya = Integer.parseInt(tblmodel.getValueAt(i, 2).toString());
-            jumlahitem=jumlahitem+jumlahbiaya;
+            jumlahitem = jumlahitem+jumlahbiaya;
             totalharga = Integer.parseInt(tblmodel.getValueAt(i, 3).toString());
             jumlahtotal=jumlahtotal+totalharga;}
         txt_jumlah_transaksi.setText(String.valueOf(jumlahitem));
@@ -395,7 +396,7 @@ public class Transaksi extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Tabel Masih Kosong!");
             }else{
                 try {
-                    int i=1 ;
+                    int i = 1 ;
                     while(i < jumlah_baris){
                         st.executeUpdate("insert into v_transaksi_pembayaran"
                         + "(nis,kode_kelas,bulan,tahun,biaya) "
@@ -407,7 +408,7 @@ public class Transaksi extends javax.swing.JFrame {
                         + ","+Gridspp.getValueAt(i, 4)+"',");
                     try {
                         sql="SELECT * FROM transaksi WHERE "
-                                + "nis='" + Gridtransaksi.getValueAt(i, 0) +"'";
+                                + "nis='" + Gridspp.getValueAt(i, 0) +"'";
                         st=con.createStatement();
                         RsSpp=st.executeQuery(sql);
                         while(RsSpp.next()){
@@ -473,7 +474,6 @@ public class Transaksi extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txt_no = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        txt_tanggal = new com.toedter.calendar.JDateChooser();
         jScrollPane3 = new javax.swing.JScrollPane();
         Gridspp = new javax.swing.JTable();
         txt_cari = new javax.swing.JTextField();
@@ -483,6 +483,7 @@ public class Transaksi extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         cbx_bulan = new javax.swing.JComboBox();
+        txt_tanggal = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -707,15 +708,6 @@ public class Transaksi extends javax.swing.JFrame {
                                 .addGap(5, 5, 5)
                                 .addComponent(btn_cari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jLabel8)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addGap(27, 27, 27)
-                        .addComponent(txt_no, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txt_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -765,7 +757,15 @@ public class Transaksi extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txt_total, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                                     .addComponent(txt_jumlahbayar)
-                                    .addComponent(txt_kembali))))))
+                                    .addComponent(txt_kembali)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txt_no, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txt_tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(22, 22, 22))
         );
         jPanel1Layout.setVerticalGroup(
@@ -949,17 +949,17 @@ public class Transaksi extends javax.swing.JFrame {
     private void Btn_SimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_SimpanActionPerformed
         // TODO add your handling code here:
         String Tanggal , NIS;
-        int totalItem, total, biaya, pengguna = 0, kembali, bulan = 0, tahun = 0, dibuat, totalBayar;
+        int totalItem, total, biaya, pengguna = 0, kembali, bulan = 0, tahun = 0, totalBayar;
 
-        nis=String.valueOf(txt_nis.getText());
-        SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd");
-        Tanggal=format.format(txt_tanggal.getDate());
-        kelas=Cmb_kl.getItemAt(Cmb_kl.getSelectedIndex()).toString();
+        nis = String.valueOf(txt_nis.getText());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Tanggal = format.format(txt_tanggal.getDate());
+        kelas = Cmb_kl.getItemAt(Cmb_kl.getSelectedIndex()).toString();
 
-        totalItem=Integer.parseInt(txt_jumlah_transaksi.getText());
-        biaya=Integer.parseInt(txt_jumlahbayar.getText());
-        kembali=Integer.parseInt(txt_kembali.getText());
-        totalBayar=Integer.parseInt(txt_total.getText());
+        totalItem = Integer.parseInt(txt_jumlah_transaksi.getText());
+        biaya = Integer.parseInt(txt_jumlahbayar.getText());
+        kembali = Integer.parseInt(txt_kembali.getText());
+        totalBayar = Integer.parseInt(txt_total.getText());
         simpandetail();
         try {
             sql="INSERT INTO transaksi(nis, "
@@ -980,7 +980,8 @@ public class Transaksi extends javax.swing.JFrame {
             + "'"+ pengguna +"',"
             + "'"+ kembali +"',"
             + "'"+ bulan +"',"
-            + "'"+ tahun +"')";
+            + "'"+ tahun +"',"
+            + "'"+ dibuat +"')";
             st=con.createStatement();
             st.execute(sql);
             tampildata("Select * from transaksi");

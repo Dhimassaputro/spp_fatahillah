@@ -69,7 +69,7 @@ private String nis, nisn, nama, alamat, status, pengguna;
 
     private void tampildata(String sql){
         DefaultTableModel datalist = new DefaultTableModel();
-        
+        datalist.addColumn("No");
         datalist.addColumn("NIS");
         datalist.addColumn("NISN");
         datalist.addColumn("Nama Siswa");
@@ -84,7 +84,7 @@ private String nis, nisn, nama, alamat, status, pengguna;
             while (RsSiswa.next()){
                 datalist.addRow(new Object[]{
                     (""+i++),RsSiswa.getString(1), RsSiswa.getString(2), 
-                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5) 
+                    RsSiswa.getString(3), RsSiswa.getString(4), RsSiswa.getString(5), RsSiswa.getString(6) 
                 });
                 Gridsiswa.setModel(datalist);
             }
