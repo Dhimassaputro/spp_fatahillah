@@ -10,5 +10,11 @@ package spp_fatahillah;
  * @author Dhimas
  */
 public class MyConstanta {
-    static String NO_TRANSAKSI, TANGGAL_TRANSAKSI, NIS, NISN, NAMA;
+    static String NO_TRANSAKSI, 
+                    TANGGAL_TRANSAKSI, 
+                    NIS, 
+                    NISN, 
+                    NAMA, 
+                    PENGGUNA, 
+                    TIPE;
 }

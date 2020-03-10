@@ -77,7 +77,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna.setEnabled(false);
         txt_sandi.setEnabled(false);
         txt_nama.setEnabled(false);
-        txt_tipe.setEnabled(false);
+        cbx_tipe.setEnabled(false);
         txt_status.setEnabled(false);
         txt_pembuat.setEnabled(false);
     }
@@ -86,7 +86,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna.setEnabled(false);
         txt_sandi.setEnabled(false);
         txt_nama.setEnabled(false);
-        txt_tipe.setEnabled(false);
+        cbx_tipe.setEnabled(false);
         txt_status.setEnabled(false);
         txt_pembuat.setEnabled(false);
         Btn_tambah.setEnabled(true);
@@ -101,7 +101,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna.setEnabled(true);
         txt_sandi.setEnabled(true);
         txt_nama.setEnabled(true);
-        txt_tipe.setEnabled(true);
+        cbx_tipe.setEnabled(true);
         txt_status.setEnabled(true);
         txt_pembuat.setEnabled(true);
         Btn_tambah.setEnabled(false);
@@ -115,7 +115,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna.setText("");
         txt_sandi.setText("");
         txt_nama.setText("");
-        txt_tipe.setText("");
+        cbx_tipe.setSelectedItem("");
         txt_status.setText("");
         txt_pembuat.setText("");
         txt_pengguna.requestFocus();
@@ -125,7 +125,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
        txt_pengguna.setText("");
        txt_sandi.setText("");
        txt_nama.setText("");
-       txt_tipe.setText("");
+       cbx_tipe.setSelectedItem("");
        txt_status.setText("");
        txt_pembuat.setText("");
     }
@@ -167,7 +167,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna.setEnabled(true);
         txt_sandi.setEnabled(true);
         txt_nama.setEnabled(true);
-        txt_tipe.setEnabled(true);
+        cbx_tipe.setEnabled(true);
         txt_status.setEnabled(true);
         txt_pembuat.setEnabled(true);
     }
@@ -214,7 +214,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
             stmt1.close();
             String sql1 = "insert into operator(pengguna, sandi, nama, tipe, status, pembuat)"
                 + "values('"
-                +txt_pengguna.getText()+"','"+txt_sandi.getText()+"','"+txt_nama.getText()+"','"+txt_tipe.getText()+"','"+txt_status.getText()+"','"+txt_pembuat.getText()+"')";
+                +txt_pengguna.getText()+"','"+txt_sandi.getText()+"','"+txt_nama.getText()+"','"+cbx_tipe.getSelectedItem()+"','"+txt_status.getText()+"','"+txt_pembuat.getText()+"')";
             stmt.executeUpdate(sql1);
             stmt.close();
             JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
@@ -257,7 +257,6 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna = new javax.swing.JTextField();
         txt_sandi = new javax.swing.JTextField();
         txt_nama = new javax.swing.JTextField();
-        txt_tipe = new javax.swing.JTextField();
         txt_status = new javax.swing.JTextField();
         txt_pembuat = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -268,6 +267,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         Btn_hapus = new javax.swing.JButton();
         Btn_kembali = new javax.swing.JButton();
         Btn_cetak = new javax.swing.JButton();
+        cbx_tipe = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -360,6 +360,9 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
 
         Btn_cetak.setText("Cetak");
 
+        cbx_tipe.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pilih", "Administrator", "Operator", "Keuangan", " ", " " }));
+        cbx_tipe.setToolTipText("");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -384,24 +387,24 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_tipe, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txt_sandi, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txt_pengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txt_pengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_nama, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                                    .addComponent(cbx_tipe, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel5))
@@ -409,10 +412,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txt_status, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txt_pembuat, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(Btn_cetak)
-                                .addGap(21, 21, 21))))))
+                            .addComponent(Btn_cetak)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,8 +436,8 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txt_tipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Btn_cetak))
+                    .addComponent(Btn_cetak)
+                    .addComponent(cbx_tipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -488,7 +488,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
                     txt_pengguna.setText(RsOperator.getString("pengguna"));
                     txt_sandi.setText(RsOperator.getString("sandi"));
                     txt_nama.setText(RsOperator.getString("nama"));
-                    txt_tipe.setText(RsOperator.getString("tipe"));
+                    cbx_tipe.setSelectedItem(RsOperator.getString("tipe"));
                     txt_status.setText(RsOperator.getString("status"));
                     txt_pembuat.setText(RsOperator.getString("pembuat"));
                     
@@ -564,7 +564,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
         txt_pengguna.setText((String)table.getValueAt(row, 0));
         txt_sandi.setText((String)table.getValueAt(row, 1));
         txt_nama.setText((String)table.getValueAt(row, 2));
-        txt_tipe.setText((String)table.getValueAt(row, 3));
+        cbx_tipe.setSelectedItem((String)table.getValueAt(row, 3));
         txt_status.setText((String)table.getValueAt(row, 4));
         txt_pembuat.setText((String)table.getValueAt(row, 5));
         user = txt_pengguna.getText();
@@ -621,6 +621,7 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
     private javax.swing.JButton Btn_simpan;
     private javax.swing.JButton Btn_tambah;
     private javax.swing.JTable Gridoperator;
+    private javax.swing.JComboBox cbx_tipe;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -634,6 +635,5 @@ private String pengguna, sandi, nama, tipe, status, pembuat;
     private javax.swing.JTextField txt_pengguna;
     private javax.swing.JTextField txt_sandi;
     private javax.swing.JTextField txt_status;
-    private javax.swing.JTextField txt_tipe;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,12 +5,21 @@
  */
 package spp_fatahillah;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author Dhimas
  */
 public class login extends javax.swing.JFrame {
-
+    Connection con = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    
     /**
      * Creates new form login
      */
@@ -206,8 +215,42 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-       String user="admin";
+        String pengguna = null, tipe = null;
+            String query = "SELECT * FROM operator WHERE pengguna=? AND sandi=? ";
+            
+        try {
+            Connection koneksi = new koneksii().getConnection();
+            java.sql.Statement st = koneksi.createStatement();
+            
+            String sql = "SELECT * FROM operator where pengguna = '"+ jTextField1.getText() +"' and sandi = '"+ jPasswordField1.getText() +"'";
+            System.out.print("sql : "+ sql);
+         
+            ResultSet rs = st.executeQuery(sql);        
+           
+            LoginInfo l = new LoginInfo();
+            
+
+            while ( rs.next() )
+            {
+                //MyConstanta.PENGGUNA = rs.getString("pengguna"); 
+                l.setPengguna( rs.getString("pengguna") ); 
+                l.setTipe( rs.getString("tipe") ); 
+            }
+            rs.last();
+            //System.out.println(l.getPengguna());
+            if (rs.getRow() == 1)
+            if (l.getPengguna() == null){
+                session.set_pengguna(pengguna);
+                JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan");
+            }
+            else{
+                new masterutama().setVisible(true);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
+        }     
+// TODO add your handling code here:
+       /*String user="admin";
         String pass="123";
         if(user.equalsIgnoreCase(jTextField1.getText())&& pass.equalsIgnoreCase(jPasswordField1.getText())){
             this.setVisible(false);
@@ -217,7 +260,7 @@ public class login extends javax.swing.JFrame {
             jTextField1.setText("");
             jPasswordField1.setText("");
             jTextField1.requestFocus();
-        }
+        }*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
