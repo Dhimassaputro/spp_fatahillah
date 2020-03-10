@@ -39,8 +39,6 @@ public class siswaa extends javax.swing.JFrame {
     private ResultSet RsSiswa;
     private String sql="";
     private String nis, nisn, nama, alamat, status, pengguna;
-
-    LoginInfo l;
           
     /**
      * Creates new form siswaa
@@ -53,24 +51,6 @@ public class siswaa extends javax.swing.JFrame {
         System.out.println( MyConstanta.PENGGUNA );
     }
     
-   /* public void initTable()
-    {
-        Object[] columnNames = { 
-                                    "NIS", 
-                                    "NISN",
-                                    "Nama",
-                                    "Alamat",
-                                    "Status",
-                                    "Pengguna",
-                                    "Dibuat",
-                                    "Diubah",
-                                    };
-        
-        DefaultTableModel model =  new DefaultTableModel();
-        tabModel = new DefaultTableModel(null, columnNames);
-        Gridsiswa.setModel(tabModel);
-    }*/
-
     private void tampildata(String sql){
         DefaultTableModel datalist = new DefaultTableModel();
         datalist.addColumn("No");
@@ -248,29 +228,35 @@ public class siswaa extends javax.swing.JFrame {
 }
 
     public void simpanData(){
-    try{
-        koneksi konek = new koneksi();
-        konek.config();
-        Statement stmt = konek.con.createStatement();
-        Statement stmt1 = konek.con.createStatement();
-        String user = txt_nis.getText();
-        String sql2 = "delete from siswa where nis='" + user + "'";
-        stmt1.executeUpdate(sql2);
-        stmt1.close();
-        String sql1 = "insert into siswa(nis, nisn, nama, alamat, status, pengguna)"
-                + "values('"+txt_nis.getText()+"','"+txt_nisn.getText()+"','"+txt_nama.getText()+"',"
-                + "'"+txt_alamat.getText()+"','"+txt_status.getText()+"',"
-                + "'"+l.getPengguna()+"')";
-        stmt.executeUpdate(sql1);
-        stmt.close();
-        JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
-        clearData();
-        refreshTable();
-        disableData();
-    }catch (Exception e){
-        System.out.println(e);
+        try{
+            koneksi konek = new koneksi();
+            konek.config();
+            
+            Statement stmt = konek.con.createStatement();
+            Statement stmt1 = konek.con.createStatement();
+            
+            String user = txt_nis.getText();
+            String sql2 = "delete from siswa where nis='" + user + "'";
+            
+            stmt1.executeUpdate(sql2);
+            stmt1.close();
+            
+            String sql1 = "insert into siswa(nis, nisn, nama, alamat, status, pengguna)"
+                    + "values('"+txt_nis.getText()+"','"+txt_nisn.getText()+"','"+txt_nama.getText()+"',"
+                    + "'"+txt_alamat.getText()+"','"+txt_status.getText()+"',"
+                    + "'"+ LoginInfo.getPengguna()+"')";
+            stmt.executeUpdate(sql1);
+            stmt.close();
+            
+            JOptionPane.showMessageDialog(null, "Input/Update User Sukses.");
+            
+            clearData();
+            refreshTable();
+            disableData();
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
-}
     
     /**
      * This method is called from within the constructor to initialize the form.

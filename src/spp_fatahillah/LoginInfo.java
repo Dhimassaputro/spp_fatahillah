@@ -12,25 +12,22 @@ import java.sql.DriverManager;
  * @author Dhimas
  */
 public class LoginInfo {
-    String pengguna, tipe;
+    public static String pengguna;
+    public static String tipe;
 
-    public void setPengguna(String pengguna) {
-        this.pengguna = pengguna;
+    public static void setPengguna(String pengguna) {
+        LoginInfo.pengguna = pengguna;
     }
 
-    public void setTipe(String tipe) {
-        this.tipe = tipe;
+    public static void setTipe(String tipe) {
+        LoginInfo.tipe = tipe;
     }
 
-    
-
-    public String getPengguna() {
+    public static String getPengguna() {
         return pengguna;
     }
 
-    public String getTipe() {
+    public static String getTipe() {
         return tipe;
     }
-    
-    
 }

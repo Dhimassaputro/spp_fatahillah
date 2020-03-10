@@ -216,7 +216,6 @@ public class login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String pengguna = null, tipe = null;
-            String query = "SELECT * FROM operator WHERE pengguna=? AND sandi=? ";
             
         try {
             Connection koneksi = new koneksii().getConnection();
@@ -227,25 +226,23 @@ public class login extends javax.swing.JFrame {
          
             ResultSet rs = st.executeQuery(sql);        
            
-            LoginInfo l = new LoginInfo();
-            
-
             while ( rs.next() )
             {
-                //MyConstanta.PENGGUNA = rs.getString("pengguna"); 
-                l.setPengguna( rs.getString("pengguna") ); 
-                l.setTipe( rs.getString("tipe") ); 
+                pengguna = rs.getString("pengguna");
+                tipe = rs.getString("tipe");
             }
+            
             rs.last();
-            //System.out.println(l.getPengguna());
-            if (rs.getRow() == 1)
-            if (l.getPengguna() == null){
-                session.set_pengguna(pengguna);
+
+            if (rs.getRow() == 1){
+                LoginInfo.setPengguna( pengguna ); 
+                LoginInfo.setTipe( rs.getString("tipe") );
+                
+                new masterutama().setVisible(true);
+            } else {
                 JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan");
             }
-            else{
-                new masterutama().setVisible(true);
-            }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "GAGAL TAMPIL \n"+e.getMessage());
         }     
