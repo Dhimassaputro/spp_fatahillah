@@ -48,7 +48,7 @@ public class siswaa extends javax.swing.JFrame {
         //initTable();
         koneksitabel();
         tampildata("SELECT * FROM siswa");
-        System.out.println( MyConstanta.PENGGUNA );
+        System.out.println( LoginInfo.pengguna );
     }
     
     private void tampildata(String sql){
@@ -671,9 +671,9 @@ public class siswaa extends javax.swing.JFrame {
     private void btn_SimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SimpanActionPerformed
         // TODO add your handling code here:
         
-        //System.out.println( l.getPengguna() );
+        System.out.println( LoginInfo.getPengguna() );
         
-        if (l.getPengguna() == null){
+        if (LoginInfo.getPengguna() == null){
             JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan");
         }else{
             simpanData();
